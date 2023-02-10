@@ -30,8 +30,8 @@ namespace Game.Gameplay
 
         public async void SetState(DayState state)
         {
+            await OnExitState(State);
             State = state;
-            await OnExitState(state);
             await OnEnterState(state);
         }
 
