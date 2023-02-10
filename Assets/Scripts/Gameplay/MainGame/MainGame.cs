@@ -7,9 +7,18 @@ namespace Game.Gameplay
 {
     public class MainGame : GameScene
     {
+        [Header("References")]
+        public DaySystem daySystem;
         void Start()
         {
             UIManager.instance.OpenUI(AvailableUI.GameHUDPanel);
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.A)) daySystem.SetState(DayState.Day);
+            if (Input.GetKeyDown(KeyCode.S)) daySystem.SetState(DayState.Midday);
+            if (Input.GetKeyDown(KeyCode.D)) daySystem.SetState(DayState.Night);
         }
     }
 }
