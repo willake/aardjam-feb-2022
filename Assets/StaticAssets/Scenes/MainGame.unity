@@ -275,7 +275,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1295605753}
+  m_Father: {fileID: 598240744}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &594137685
@@ -442,6 +442,56 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &598240742
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 598240744}
+  - component: {fileID: 598240743}
+  m_Layer: 0
+  m_Name: EnvironmentSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &598240743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598240742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2ac297eb61ef4c43a5ae8c91fb95498, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalLight: {fileID: 467275702}
+  dayColor: {r: 1, g: 1, b: 1, a: 0}
+  middayColor: {r: 0.7647059, g: 0.7019608, b: 0.5529412, a: 0}
+  nightColor: {r: 0.23529412, g: 0.3372549, b: 0.5294118, a: 0}
+  transitionDuration: 0.4
+  transitionEase: 1
+--- !u!4 &598240744
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598240742}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 467275703}
+  m_Father: {fileID: 789512049}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &660417099
 GameObject:
   m_ObjectHideFlags: 0
@@ -589,7 +639,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   daySystem: {fileID: 1295605754}
-  buildingSystem: {fileID: 1287317614}
 --- !u!4 &789512049
 Transform:
   m_ObjectHideFlags: 0
@@ -603,6 +652,7 @@ Transform:
   m_Children:
   - {fileID: 1295605753}
   - {fileID: 1287317613}
+  - {fileID: 598240744}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -679,8 +729,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 467275703}
+  m_Children: []
   m_Father: {fileID: 789512049}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -696,12 +745,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df726229838e5014d9a16f3f2065f766, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  globalLight: {fileID: 467275702}
-  dayColor: {r: 1, g: 1, b: 1, a: 0}
-  middayColor: {r: 1, g: 0.87262964, b: 0.41037738, a: 0}
-  nightColor: {r: 0.29803923, g: 0.4117647, b: 0.62352943, a: 0}
-  transitionDuration: 0.4
-  transitionEase: 1
+  environmentSystem: {fileID: 598240743}
+  buildingSystem: {fileID: 1287317614}
 --- !u!1 &1869495060
 GameObject:
   m_ObjectHideFlags: 0

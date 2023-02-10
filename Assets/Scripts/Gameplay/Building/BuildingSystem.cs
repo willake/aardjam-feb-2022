@@ -58,7 +58,6 @@ namespace Game.Gameplay
         {
             for (int i = _floors.Count - 1; i >= 0; i--)
             {
-                Debug.Log($"Floor index {i} will be placed at {_floors.Count - 1 - i} floor");
                 _floors[i].transform.position =
                     buildingBase.position + CalculateBuildingHeight(
                         _floors.Count - 1 - i);

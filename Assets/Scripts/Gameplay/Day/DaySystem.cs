@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
-using UnityEngine.Experimental.Rendering.Universal;
 using DG.Tweening;
+using Game.Gameplay.Environments;
 
 namespace Game.Gameplay
 {
@@ -17,52 +17,54 @@ namespace Game.Gameplay
     public class DaySystem : MonoBehaviour
     {
         [Header("References")]
-        public Light2D globalLight;
+        public EnvironmentSystem environmentSystem;
+        public BuildingSystem buildingSystem;
 
-        [Header("Settings")]
-        public Color dayColor;
-        public Color middayColor;
-        public Color nightColor;
-        public float transitionDuration = 0.4f;
-        public Ease transitionEase = Ease.Linear;
-
-        public DayState State { get; private set; }
-
-        public async void SetState(DayState state)
+        public void Init()
         {
-            await OnExitState(State);
-            State = state;
-            await OnEnterState(state);
+            buildingSystem.Init();
         }
 
-        private async UniTask OnEnterState(DayState state)
+        // prediction outcome phase
+        public async void StartDay()
         {
-            Color target = GetDayStateColor(state);
-            await DOTween.To(
-                () => globalLight.color,
-                (color) => globalLight.color = color,
-                target,
-                transitionDuration
-            ).SetEase(transitionEase).AsyncWaitForCompletion();
+            Debug.Log("Start Day");
+            await environmentSystem.SetState(DayState.Day);
+            Debug.Log("Today is sunny");
+            await UniTask.Delay(TimeSpan.FromSeconds(3));
+            // play weather animation
+            StartMidday();
         }
 
-        private async UniTask OnExitState(DayState state)
+        // building phase
+        async void StartMidday()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(1));
+            Debug.Log("Start Midday");
+            await environmentSystem.SetState(DayState.Midday);
+            // Debug.Log("Increase 1 villager");
+            buildingSystem.IncreaseFloor();
+            Debug.Log($"Increase 1 floor. Now is {buildingSystem.Height}");
+            await UniTask.Delay(TimeSpan.FromSeconds(3));
+            // play building animation
+            // increase building height
+            StartNight();
         }
 
-        private Color GetDayStateColor(DayState state)
+        // prediction phase
+        async void StartNight()
         {
-            switch (state)
-            {
-                case DayState.Day:
-                default:
-                    return dayColor;
-                case DayState.Midday:
-                    return middayColor;
-                case DayState.Night:
-                    return nightColor;
-            }
+            Debug.Log("Start Night");
+            await environmentSystem.SetState(DayState.Night);
+            // open weather info UI
+            // wait for end day
+        }
+
+        private void Update()
+        {
+            //if (Input.GetKeyDown(KeyCode.A)) daySystem.SetState(DayState.Day);
+            //if (Input.GetKeyDown(KeyCode.S)) daySystem.SetState(DayState.Midday);
+            //if (Input.GetKeyDown(KeyCode.D)) daySystem.SetState(DayState.Night);
+            if (Input.GetKeyDown(KeyCode.Q)) buildingSystem.IncreaseFloor();
         }
     }
 }
