@@ -26,24 +26,35 @@ namespace Game.Gameplay
         }
 
         // prediction outcome phase
-        void StartDay()
+        public async void StartDay()
         {
-            //daySystem.SetState(DayState.Day);
+            Debug.Log("Start Day");
+            await environmentSystem.SetState(DayState.Day);
+            Debug.Log("Today is sunny");
+            await UniTask.Delay(TimeSpan.FromSeconds(3));
             // play weather animation
+            StartMidday();
         }
 
         // building phase
-        void StartMidday()
+        async void StartMidday()
         {
-            //daySystem.SetState(DayState.Midday);
+            Debug.Log("Start Midday");
+            await environmentSystem.SetState(DayState.Midday);
+            // Debug.Log("Increase 1 villager");
+            buildingSystem.IncreaseFloor();
+            Debug.Log($"Increase 1 floor. Now is {buildingSystem.Height}");
+            await UniTask.Delay(TimeSpan.FromSeconds(3));
             // play building animation
             // increase building height
+            StartNight();
         }
 
         // prediction phase
-        void StartNight()
+        async void StartNight()
         {
-            //daySystem.SetState(DayState.Night);
+            Debug.Log("Start Night");
+            await environmentSystem.SetState(DayState.Night);
             // open weather info UI
             // wait for end day
         }

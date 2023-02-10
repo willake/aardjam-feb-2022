@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.UI;
+using System;
+using Cysharp.Threading.Tasks;
 
 namespace Game.Gameplay
 {
@@ -9,14 +11,17 @@ namespace Game.Gameplay
     {
         [Header("References")]
         public DaySystem daySystem;
-        void Start()
+        async void Start()
         {
             UIManager.instance.OpenUI(AvailableUI.GameHUDPanel);
+            daySystem.Init();
+            await PlayIntro();
+            daySystem.StartDay();
         }
 
-        void PlayIntro()
+        async UniTask PlayIntro()
         {
-
+            await UniTask.Delay(TimeSpan.FromSeconds(2));
         }
     }
 }
