@@ -59,8 +59,8 @@ namespace Game.UI
             if (panel)
             {
                 _panelStack.Push(panel);
-                panel.Open();
                 panel.transform.SetAsLastSibling();
+                panel.Open();
                 SetFocusing(panel);
             }
 
@@ -69,7 +69,6 @@ namespace Game.UI
 
         public async UniTask<UIPanel> OpenUIAsync(AvailableUI ui)
         {
-            BlockUIInput();
             if (_openedUIList.Contains(ui))
             {
                 Debug.LogError("UI has been opened. There might be wrong implementation. ");
@@ -89,8 +88,9 @@ namespace Game.UI
             if (panel)
             {
                 _panelStack.Push(panel);
-                await panel.OpenAsync();
                 panel.transform.SetAsLastSibling();
+                BlockUIInput();
+                await panel.OpenAsync();
                 SetFocusing(panel);
             }
             UnblockUIInput();

@@ -507,6 +507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 703f62dc493103a418cbc30c18a3bc92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panelWeather: {fileID: 236443755988183728}
   btnEndDay: {fileID: 6663721530949236633}
 --- !u!1 &8588516946059958154
 GameObject:

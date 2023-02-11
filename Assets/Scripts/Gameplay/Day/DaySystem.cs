@@ -58,7 +58,7 @@ namespace Game.Gameplay
             await environmentSystem.SetState(DayState.Night);
             // open weather info UI
             PredictionPanel panel =
-                UIManager.instance.OpenUI(AvailableUI.PredictionPanel) as PredictionPanel;
+                await UIManager.instance.OpenUIAsync(AvailableUI.PredictionPanel) as PredictionPanel;
             await panel.ShowEndDayButton();
             UIManager.instance.Prev();
             StartDay();
