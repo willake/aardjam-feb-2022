@@ -859,7 +859,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d20159875f381f74eb7eb44e8239b07f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  villagerPrefab: {fileID: 2662837417632103883, guid: 44e382be6b2aa8f4ea148d83857f69c1, type: 3}
 --- !u!1 &1287317612
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,6 +869,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1287317613}
   - component: {fileID: 1287317614}
+  - component: {fileID: 1287317615}
   m_Layer: 0
   m_Name: BuildingSystem
   m_TagString: Untagged
@@ -903,9 +903,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1701aea53e886664dbc58d53128425a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  factory: {fileID: 1287317615}
   buildingBase: {fileID: 1869495061}
-  bellPrefab: {fileID: 481797976108183635, guid: d3730c04ab4b9024682c131ca47f9510, type: 3}
-  normalPrefab: {fileID: 7858462525864893101, guid: b4d824bdce1e1c04792e71097487ed0f, type: 3}
+--- !u!114 &1287317615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287317612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7d487632e9ff23449516e1e3a500b6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1295605752
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0156b5e671f388d4081c2b69ea527065, type: 3}
+  m_Name: Gameplay Resources
+  m_EditorClassIdentifier: 
+  Buildings:
+    TopLevel: {fileID: 481797976108183635, guid: d3730c04ab4b9024682c131ca47f9510, type: 3}
+    MidLevelEmpty: {fileID: 1242194082381359298, guid: d5fa016ae111d2440860ccbaad54cad1, type: 3}
+    MidLevelWalls: {fileID: 7858462525864893101, guid: b4d824bdce1e1c04792e71097487ed0f, type: 3}
+  Village:
+    Villager: {fileID: 2662837417632103883, guid: 44e382be6b2aa8f4ea148d83857f69c1, type: 3}
