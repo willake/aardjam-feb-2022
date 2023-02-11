@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
+using Cysharp.Threading.Tasks;
 using WillakeD.CommonPatterns;
 using System.Linq;
 using Game.Inputs;
@@ -38,8 +38,7 @@ namespace Game.UI
                 Debug.LogError("UI has been opened. There might be wrong implementation. ");
                 return null;
             }
-            UIPanel panel;
-            if (_panelPool.TryGetValue(ui, out panel) == false)
+            if (_panelPool.TryGetValue(ui, out UIPanel panel) == false)
             {
                 GameObject prefab = GetUIPrefab(ui);
                 if (prefab != null)
@@ -54,6 +53,35 @@ namespace Game.UI
             {
                 _panelStack.Push(panel);
                 panel.Open();
+                panel.transform.SetAsLastSibling();
+                SetFocusing(panel);
+            }
+
+            return panel;
+        }
+
+        public async UniTask<UIPanel> OpenUIAsync(AvailableUI ui)
+        {
+            if (_openedUIList.Contains(ui))
+            {
+                Debug.LogError("UI has been opened. There might be wrong implementation. ");
+                return null;
+            }
+            if (_panelPool.TryGetValue(ui, out UIPanel panel) == false)
+            {
+                GameObject prefab = GetUIPrefab(ui);
+                if (prefab != null)
+                {
+                    GameObject go = Instantiate(prefab, canvas.transform);
+                    panel = go.GetComponent<UIPanel>();
+                    _openedUIList.Add(ui);
+                }
+            }
+
+            if (panel)
+            {
+                _panelStack.Push(panel);
+                await panel.OpenAsync();
                 panel.transform.SetAsLastSibling();
                 SetFocusing(panel);
             }
@@ -83,7 +111,19 @@ namespace Game.UI
             while (_panelStack.Count > 0)
             {
                 UIPanel panel = _panelStack.Pop();
-                panel.CloseImmediately();
+                panel.Close();
+                _panelPool[panel.Type] = panel;
+            }
+
+            ClearUICache();
+        }
+
+        public async UniTask CloseAllUIAsync()
+        {
+            while (_panelStack.Count > 0)
+            {
+                UIPanel panel = _panelStack.Pop();
+                await panel.CloseAsync();
                 _panelPool[panel.Type] = panel;
             }
 
@@ -126,6 +166,16 @@ namespace Game.UI
         {
             UIPanel panel = _panelStack.Pop();
             panel.Close();
+            _openedUIList.Remove(panel.Type);
+            _panelPool[panel.Type] = panel;
+
+            if (_panelStack.Count > 0) SetFocusing(_panelStack.Last());
+        }
+
+        public async UniTask PrevAsync()
+        {
+            UIPanel panel = _panelStack.Pop();
+            await panel.CloseAsync();
             _openedUIList.Remove(panel.Type);
             _panelPool[panel.Type] = panel;
 
