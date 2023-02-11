@@ -39,6 +39,7 @@ namespace Game.Gameplay
             await environmentSystem.SetState(DayState.Day);
             Debug.Log("Today is sunny");
             await UniTask.Delay(TimeSpan.FromSeconds(dayAnimLength));
+            villagerSystem.AppearVillagers();
             villagerSystem.AddNewVillager();
             // play weather animation
             StartMidday();

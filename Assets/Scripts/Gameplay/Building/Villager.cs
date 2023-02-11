@@ -13,22 +13,8 @@ namespace Game.Gameplay
         // will add it back later
         //public VillagerType Type { get; private set; }
 
-        private Animator _animator;
-        private SpriteRenderer _renderer;
-
-        private Animator GetAnimator()
-        {
-            if (_animator == null) _animator = GetComponent<Animator>();
-
-            return _animator;
-        }
-
-        private SpriteRenderer GetRenderer()
-        {
-            if (_renderer == null) _renderer = GetComponent<SpriteRenderer>();
-
-            return _renderer;
-        }
+        [SerializeField] private Animator _animator;
+        [SerializeField] private SpriteRenderer _renderer;
 
         private Tween _bounceTween;
 
@@ -38,28 +24,25 @@ namespace Game.Gameplay
             Speed = speed;
         }
 
-        public async UniTask MoveTo(Vector3 target)
+        public async UniTask MoveTo(Vector3 target, bool disappearOnTargetReached = false)
         {
             float distance = Mathf.Abs(target.x - transform.position.x);
 
-            GetRenderer().flipX = target.x - transform.position.x > 0;
+            _renderer.flipX = target.x - transform.position.x > 0;
 
             float baseHeight = transform.position.y;
 
-            GetAnimator().SetBool("isMoving", true);
-
-            // // bounce
-            // _bounceTween = DOTween.Sequence()
-            //         .Append(transform.DOMoveY(baseHeight + 0.1f, 0.1f))
-            //         .Append(transform.DOMoveY(baseHeight + 0.0f, 0.05f))
-            //         .SetLoops(-1);
+            _animator.SetBool("isMoving", true);
 
             await transform
                 .DOMoveX(target.x, distance / Speed).SetEase(Ease.Linear).AsyncWaitForCompletion();
 
             _bounceTween?.Kill();
 
-            GetAnimator().SetBool("isMoving", false);
+            _animator.SetBool("isMoving", false);
+            if (disappearOnTargetReached)
+                AnimateVisibleToggle(false);
+
             Vector2 pos = transform.position;
             pos.y = baseHeight;
             transform.position = pos;
@@ -70,14 +53,19 @@ namespace Game.Gameplay
             float baseHeight = transform.position.y;
 
             await DOTween.Sequence()
-                            .Append(transform.DOMoveY(baseHeight + Random.Range(0.5f, 1.5f), Random.Range(0.1f, 0.3f)))
-                            .Append(transform.DOMoveY(baseHeight + 0.0f, 0.1f))
+                            .Append(transform.DOMoveY(baseHeight + Random.Range(0.5f, 1f), Random.Range(0.1f, 0.3f)))
+                            .Append(transform.DOMoveY(baseHeight + 0.0f, 0.15f))
                             .SetLoops(4)
                             .AsyncWaitForCompletion();
 
             Vector2 pos = transform.position;
             pos.y = baseHeight;
             transform.position = pos;
+        }
+
+        public void AnimateVisibleToggle(bool toggle = true)
+        {
+            _animator.SetBool("isVisible", toggle);
         }
 
         public enum VillagerType

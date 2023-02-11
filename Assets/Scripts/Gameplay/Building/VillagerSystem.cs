@@ -22,6 +22,7 @@ namespace Game.Gameplay
         public int VillagerAmount { get => _villagers.Count; }
 
         private float _towerXOffset = 2;
+        private float _randTowerOffset = 1;
         private float _edgeXOffset = 1;
 
         public Villager AddNewVillager()
@@ -38,6 +39,7 @@ namespace Game.Gameplay
         {
             Vector2 worldSpaceMax = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0));
             float randomXScreenSpace = UnityRandom.Range(_towerXOffset, 4.5f - _edgeXOffset);
+
             Vector2 spawnPoint =
                 UnityRandom.value >= 0.5f
                     ? new Vector2(randomXScreenSpace, towerTarget.position.y)
@@ -45,10 +47,30 @@ namespace Game.Gameplay
             return spawnPoint;
         }
 
+        private Vector2 GetRandomTargetPosVariation(int _villagerID)
+        {
+            float offset = UnityRandom.Range(0, _randTowerOffset);
+            offset = GetVillagerHomeDirection(_villagerID) ? offset : -offset;
+            return new Vector2(towerTarget.position.x + offset, towerTarget.position.y);
+        }
+
+        private bool GetVillagerHomeDirection(int _villagerID)
+        {
+            if (_villagersRegisteredDict.TryGetValue(_villagerID, out Vector2 home))
+            {
+                return home.x > towerTarget.position.x;
+            }
+            else 
+                return false;
+        }
+
         public async UniTask MoveVillagersToTower()
         {
             await UniTask
-                .WhenAll(_villagers.Select(x => x.MoveTo(towerTarget.position)));
+                .WhenAll(_villagers.Select(x => {
+                    var targetPos = GetRandomTargetPosVariation(x.ID);
+                    return x.MoveTo(targetPos);
+                    }));
         }
 
         public async UniTask StartTowerWork()
@@ -57,7 +79,6 @@ namespace Game.Gameplay
                 .WhenAll(_villagers.Select(x => x.AnimateWork()));
         }
 
-        //Maybe eventually play an animation for this too, would add to immersion!
         public async UniTask MoveVillagersHome()
         {
             await UniTask
@@ -65,13 +86,18 @@ namespace Game.Gameplay
                 {
                     if (_villagersRegisteredDict.TryGetValue(x.ID, out Vector2 home))
                     {
-                        return x.MoveTo(home);
+                        return x.MoveTo(home, true);
                     }
                     else
                     {
-                        return x.MoveTo(houseHolder.position);
+                        return x.MoveTo(houseHolder.position, true);
                     }
                 }));
+        }
+
+        public void AppearVillagers()
+        {
+            _villagers.ForEach(x => x.AnimateVisibleToggle(true));
         }
     }
 }
