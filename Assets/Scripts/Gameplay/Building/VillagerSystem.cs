@@ -38,10 +38,10 @@ namespace Game.Gameplay
         private Vector2 PickRandomPointAsHome()
         {
             Vector2 worldSpaceMax = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0));
-            float randomXScreenSpace = UnityRandom.Range(_towerXOffset, worldSpaceMax.x - _edgeXOffset);
-            Vector2 spawnPoint = 
-                UnityRandom.value >= 0.5f 
-                    ? new Vector2(randomXScreenSpace, towerTarget.position.y) 
+            float randomXScreenSpace = UnityRandom.Range(_towerXOffset, 4.5f - _edgeXOffset);
+            Vector2 spawnPoint =
+                UnityRandom.value >= 0.5f
+                    ? new Vector2(randomXScreenSpace, towerTarget.position.y)
                     : new Vector2(-randomXScreenSpace, towerTarget.position.y);
             return spawnPoint;
         }
