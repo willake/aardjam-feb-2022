@@ -16,8 +16,11 @@ namespace Game.Gameplay.Weathers
                 case WeatherType.Sunny:
                 default:
                     Weather = sunny;
+                    Weather.gameObject.SetActive(true);
                     break;
             }
+
+            Weather.Init();
         }
     }
 

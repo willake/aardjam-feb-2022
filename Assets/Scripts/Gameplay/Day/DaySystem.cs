@@ -6,6 +6,7 @@ using System;
 using DG.Tweening;
 using Game.Gameplay.Environments;
 using Game.UI;
+using Game.Gameplay.Weathers;
 
 namespace Game.Gameplay
 {
@@ -21,6 +22,7 @@ namespace Game.Gameplay
         public EnvironmentSystem environmentSystem;
         public BuildingSystem buildingSystem;
         public VillagerSystem villagerSystem;
+        public WeatherSystem weatherSystem;
 
         private const float dayAnimLength = 2f;
         private const float middayVillagerAnimLength = 2f;
@@ -38,9 +40,11 @@ namespace Game.Gameplay
             Debug.Log("Start Day");
             await environmentSystem.SetState(DayState.Day);
             Debug.Log("Today is sunny");
-            await UniTask.Delay(TimeSpan.FromSeconds(dayAnimLength));
+            weatherSystem.SetWeather(WeatherType.Sunny);
+            await weatherSystem.Weather.OnEnterDay();
             villagerSystem.AddNewVillager();
             // play weather animation
+            await weatherSystem.Weather.OnExitDay();
             StartMidday();
         }
 
@@ -48,6 +52,7 @@ namespace Game.Gameplay
         async void StartMidday()
         {
             Debug.Log("Start Midday");
+            await weatherSystem.Weather.OnEnterMidday();
             await environmentSystem.SetState(DayState.Midday);
             Debug.Log($"Increase 1 villager. Now is {villagerSystem.VillagerAmount}");
             //Move villagers
@@ -55,6 +60,8 @@ namespace Game.Gameplay
             await villagerSystem.StartTowerWork();
             buildingSystem.IncreaseFloor();
             Debug.Log($"Increase 1 floor. Now is {buildingSystem.Height}");
+
+            await weatherSystem.Weather.OnExitMidday();
             StartNight();
         }
 
@@ -62,6 +69,8 @@ namespace Game.Gameplay
         async void StartNight()
         {
             Debug.Log("Start Night");
+
+            await weatherSystem.Weather.OnEnterNight();
             await environmentSystem.SetState(DayState.Night);
 
             await villagerSystem.MoveVillagersHome();
@@ -71,6 +80,8 @@ namespace Game.Gameplay
                 await UIManager.instance.OpenUIAsync(AvailableUI.PredictionPanel) as PredictionPanel;
             await panel.ShowEndDayButton();
             UIManager.instance.Prev();
+
+            await weatherSystem.Weather.OnExitNight();
             StartDay();
             // wait for end day
         }

@@ -3,11 +3,11 @@ using DG.Tweening;
 
 namespace Game.Gameplay.Weathers
 {
-    public class Sun : MonoBehaviour
+    public class Moon : MonoBehaviour
     {
         [Header("Settings")]
         public float riseHieght = 3.78f;
-        public float dawnHieght = -5;
+        public float downHieght = -5;
         public float duration = 0.5f;
         public Ease ease = Ease.InOutSine;
 
@@ -20,7 +20,7 @@ namespace Game.Gameplay.Weathers
             }
             else
             {
-                pos.y = dawnHieght;
+                pos.y = downHieght;
             }
             transform.position = pos;
         }
@@ -29,15 +29,15 @@ namespace Game.Gameplay.Weathers
             return transform.DOMoveY(riseHieght, duration).SetEase(ease);
         }
 
-        public Tween Dawn()
+        public Tween Down()
         {
-            return transform.DOMoveY(dawnHieght, duration).SetEase(ease);
+            return transform.DOMoveY(downHieght, duration).SetEase(ease);
         }
 
         public enum State
         {
             Rise,
-            Dawn
+            Down
         }
     }
 }
