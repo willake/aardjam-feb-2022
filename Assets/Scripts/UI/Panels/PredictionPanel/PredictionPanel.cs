@@ -10,17 +10,8 @@ namespace Game.UI
     {
         public override AvailableUI Type { get => AvailableUI.PredictionPanel; }
 
-        // [Title("References")]
-        // public WDButton btnMenu;
-
-        void Start()
-        {
-            // btnMenu
-            //     .ButtonDidClick
-            //     .ObserveOnMainThread()
-            //     .Subscribe(_ => SwitchToMainGame())
-            //     .AddTo(this);
-        }
+        [Title("References")]
+        public WDButton btnEndDay;
 
         public override WDButton[] GetSelectableButtons()
         {
@@ -43,6 +34,13 @@ namespace Game.UI
         public override void CloseImmediately()
         {
             gameObject.SetActive(false);
+        }
+
+        public async UniTask ShowEndDayButton()
+        {
+            btnEndDay.gameObject.SetActive(true);
+            await btnEndDay.OnClickAsync();
+            btnEndDay.gameObject.SetActive(false);
         }
 
         private void OnDestroy()

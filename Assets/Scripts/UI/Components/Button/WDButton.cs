@@ -17,7 +17,7 @@ namespace Game.UI
         public bool IsInteractable { get => _isInteractable; }
         private bool _isHovered;
 
-        public OnClickEvent onClick;
+        public OnClickEvent onClick = new OnClickEvent();
         public IObservable<Unit> OnClickObservable
         {
             get => onClick

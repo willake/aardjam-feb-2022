@@ -21,7 +21,7 @@ namespace Game.UI
         void Start()
         {
             btnMenu
-                .ButtonDidClick
+                .OnClickObservable
                 .ObserveOnMainThread()
                 .Subscribe(_ => SwitchToMainGame())
                 .AddTo(this);
