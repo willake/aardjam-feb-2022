@@ -12,5 +12,6 @@ namespace Game
         public AudioResources AudioResources;
         public SceneResources SceneResources;
         public UIPanelResources UIPanelResources;
+        public GameplayResources GameplayResources;
     }
 }

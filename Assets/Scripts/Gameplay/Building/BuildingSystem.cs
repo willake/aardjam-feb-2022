@@ -7,11 +7,8 @@ namespace Game.Gameplay
     public class BuildingSystem : MonoBehaviour
     {
         [Header("References")]
+        public BuildingBlockFactory factory;
         public Transform buildingBase;
-
-        [Header("Settings")]
-        public GameObject bellPrefab;
-        public GameObject normalPrefab;
 
         private List<BuildingBlock> _floors = new List<BuildingBlock>();
         public int Height { get; private set; }
@@ -20,7 +17,7 @@ namespace Game.Gameplay
         {
             Height = 0;
             _floors.Add(
-                GenerateBuildingBlock(BuildingBlockType.Bell)
+                factory.GenerateBuildingBlock(BuildingBlockType.TopLevel, buildingBase)
             );
             UpdateFloors();
         }
@@ -29,29 +26,9 @@ namespace Game.Gameplay
         {
             Height += 1;
             _floors.Add(
-                GenerateBuildingBlock(BuildingBlockType.Normal)
+                factory.GenerateBuildingBlock(BuildingBlockType.MidLevelEmpty, buildingBase)
             );
             UpdateFloors();
-        }
-
-        private BuildingBlock GenerateBuildingBlock(BuildingBlockType type)
-        {
-            switch (type)
-            {
-                case BuildingBlockType.Bell:
-                default:
-                    GameObject bellGo = Instantiate(
-                        bellPrefab,
-                        Vector3.zero,
-                        Quaternion.identity, buildingBase);
-                    return bellGo.GetComponent<BuildingBlock>();
-                case BuildingBlockType.Normal:
-                    GameObject normalGo = Instantiate(
-                        normalPrefab,
-                        Vector3.zero,
-                        Quaternion.identity, buildingBase);
-                    return normalGo.GetComponent<BuildingBlock>();
-            }
         }
 
         private void UpdateFloors()
@@ -67,12 +44,6 @@ namespace Game.Gameplay
         private Vector3 CalculateBuildingHeight(int floor)
         {
             return new Vector3(0, floor * 1f, 0);
-        }
-
-        public enum BuildingBlockType
-        {
-            Bell,
-            Normal
         }
     }
 }
