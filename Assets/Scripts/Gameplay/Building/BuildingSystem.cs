@@ -52,7 +52,7 @@ namespace Game.Gameplay
             for (int i = _floors.Count - 1; i >= 0; i--)
             {
                 _floors[i].transform.position =
-                    buildingBase.position + new Vector3(0, height, i * -0.01f);
+                    buildingBase.position + new Vector3(0, height, i * 0.001f);
                 height += GetBuildingHeight(_floors[i].Type);
             }
         }
