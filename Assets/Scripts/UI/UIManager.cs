@@ -9,7 +9,9 @@ namespace Game.UI
 {
     public class UIManager : Singleton<UIManager>
     {
+        [Header("references")]
         public Canvas canvas;
+        public GameObject inputBlocker;
 
         private Stack<UIPanel> _panelStack = new Stack<UIPanel>();
 
@@ -67,6 +69,7 @@ namespace Game.UI
 
         public async UniTask<UIPanel> OpenUIAsync(AvailableUI ui)
         {
+            BlockUIInput();
             if (_openedUIList.Contains(ui))
             {
                 Debug.LogError("UI has been opened. There might be wrong implementation. ");
@@ -90,7 +93,7 @@ namespace Game.UI
                 panel.transform.SetAsLastSibling();
                 SetFocusing(panel);
             }
-
+            UnblockUIInput();
             return panel;
         }
 
@@ -128,6 +131,7 @@ namespace Game.UI
 
         public async UniTask CloseAllUIAsync()
         {
+            BlockUIInput();
             while (_panelStack.Count > 0)
             {
                 UIPanel panel = _panelStack.Pop();
@@ -136,6 +140,7 @@ namespace Game.UI
             }
 
             ClearUICache();
+            UnblockUIInput();
         }
 
         public void ClearUICache()
@@ -182,12 +187,14 @@ namespace Game.UI
 
         public async UniTask PrevAsync()
         {
+            BlockUIInput();
             UIPanel panel = _panelStack.Pop();
             await panel.CloseAsync();
             _openedUIList.Remove(panel.Type);
             _panelPool[panel.Type] = panel;
 
             if (_panelStack.Count > 0) SetFocusing(_panelStack.Last());
+            UnblockUIInput();
         }
 
         private void KeyboardSelectPrev()
@@ -275,6 +282,19 @@ namespace Game.UI
         private void PerformCancelAction()
         {
             _focusing.PerformCancelAction();
+        }
+
+        private void BlockUIInput()
+        {
+            InputManager.instance.SetAllowInput(false);
+            inputBlocker.SetActive(true);
+            inputBlocker.transform.SetAsLastSibling();
+        }
+
+        private void UnblockUIInput()
+        {
+            InputManager.instance.SetAllowInput(true);
+            inputBlocker.SetActive(false);
         }
     }
 }

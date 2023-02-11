@@ -234,6 +234,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isPersistant: 0
   canvas: {fileID: 1394699990}
+  inputBlocker: {fileID: 5442759028412760656}
+  enableKeyboardControl: 0
 --- !u!1 &276261628
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,6 +639,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 448889003404213122, guid: bbf9c5379f74902418a447cf49d21de4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5442759027055832216, guid: bbf9c5379f74902418a447cf49d21de4, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -727,3 +733,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bbf9c5379f74902418a447cf49d21de4, type: 3}
+--- !u!1 &5442759028412760656 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 448889003404213122, guid: bbf9c5379f74902418a447cf49d21de4, type: 3}
+  m_PrefabInstance: {fileID: 5442759028412760655}
+  m_PrefabAsset: {fileID: 0}
