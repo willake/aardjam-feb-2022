@@ -27,25 +27,45 @@ namespace Game.Gameplay
         public void IncreaseFloor()
         {
             Height += 1;
-            _floors.Add(
-                factory.GenerateBuildingBlock(BuildingBlockType.MidLevelEmpty, buildingBase)
-            );
+            int r = Random.Range(0, 2);
+
+            if (r > 0)
+            {
+                _floors.Add(
+                    factory.GenerateBuildingBlock(
+                        BuildingBlockType.MidLevelEmpty,
+                        buildingBase));
+            }
+            else
+            {
+                _floors.Add(
+                    factory.GenerateBuildingBlock(
+                        BuildingBlockType.MidLevelWalls,
+                        buildingBase));
+            }
             UpdateFloors();
         }
 
         private void UpdateFloors()
         {
+            float height = 0;
             for (int i = _floors.Count - 1; i >= 0; i--)
             {
                 _floors[i].transform.position =
-                    buildingBase.position + CalculateBuildingHeight(
-                        _floors.Count - 1 - i);
+                    buildingBase.position + new Vector3(0, height, i * -0.01f);
+                height += GetBuildingHeight(_floors[i].Type);
             }
         }
 
-        private Vector3 CalculateBuildingHeight(int floor)
+        private float GetBuildingHeight(BuildingBlockType type)
         {
-            return new Vector3(0, floor * 1f, 0);
+            switch (type)
+            {
+                case BuildingBlockType.TopLevel: return 1.1875f;
+                case BuildingBlockType.MidLevelEmpty: return 0.6875f;
+                case BuildingBlockType.MidLevelWalls: return 0.7283f;
+                default: return 1;
+            }
         }
     }
 }
