@@ -19,5 +19,6 @@ namespace Game
             return path;
         }
         public static string VERSION = "v1.0.0";
+        public static string TOWERTAG = "Tower";
     }
 }

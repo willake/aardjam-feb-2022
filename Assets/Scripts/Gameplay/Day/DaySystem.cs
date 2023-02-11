@@ -20,6 +20,12 @@ namespace Game.Gameplay
         [Header("References")]
         public EnvironmentSystem environmentSystem;
         public BuildingSystem buildingSystem;
+        public VillagerSystem villagerSystem;
+
+        private const float dayAnimLength = 2f;
+        private const float middayVillagerAnimLength = 2f;
+        private const float middayBuildingAnimLength = 3f;
+        private const float nightAnimLength = 3f;
 
         public void Init()
         {
@@ -32,7 +38,8 @@ namespace Game.Gameplay
             Debug.Log("Start Day");
             await environmentSystem.SetState(DayState.Day);
             Debug.Log("Today is sunny");
-            await UniTask.Delay(TimeSpan.FromSeconds(3));
+            await UniTask.Delay(TimeSpan.FromSeconds(dayAnimLength));
+            villagerSystem.AddNewVillager();
             // play weather animation
             StartMidday();
         }
@@ -42,12 +49,12 @@ namespace Game.Gameplay
         {
             Debug.Log("Start Midday");
             await environmentSystem.SetState(DayState.Midday);
-            // Debug.Log("Increase 1 villager");
+            Debug.Log($"Increase 1 villager. Now is {villagerSystem.VillagerAmount}");
+            //Move villagers
+            await villagerSystem.MoveVillagersToTower();
+            await villagerSystem.StartTowerWork();
             buildingSystem.IncreaseFloor();
             Debug.Log($"Increase 1 floor. Now is {buildingSystem.Height}");
-            await UniTask.Delay(TimeSpan.FromSeconds(3));
-            // play building animation
-            // increase building height
             StartNight();
         }
 
@@ -56,6 +63,9 @@ namespace Game.Gameplay
         {
             Debug.Log("Start Night");
             await environmentSystem.SetState(DayState.Night);
+
+            await villagerSystem.MoveVillagersHome();
+
             // open weather info UI
             PredictionPanel panel =
                 await UIManager.instance.OpenUIAsync(AvailableUI.PredictionPanel) as PredictionPanel;
