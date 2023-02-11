@@ -23,7 +23,6 @@ namespace Game.Gameplay
 
         private float _towerXOffset = 2;
         private float _edgeXOffset = 1;
-        private float _YSpawn = -2.5f;
 
         public Villager AddNewVillager()
         {
@@ -32,6 +31,7 @@ namespace Game.Gameplay
             Vector2 home = PickRandomPointAsHome();
             _villagersRegisteredDict.Add(newVillager.ID, home);
             newVillager.transform.position = home;
+            Debug.Log("Home: " + home);
             return newVillager;
         }
 
@@ -39,7 +39,10 @@ namespace Game.Gameplay
         {
             Vector2 worldSpaceMax = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0));
             float randomXScreenSpace = UnityRandom.Range(_towerXOffset, worldSpaceMax.x - _edgeXOffset);
-            Vector2 spawnPoint = UnityRandom.value >= 0.5f ? new Vector2(randomXScreenSpace, _YSpawn) : new Vector2(-randomXScreenSpace, _YSpawn);
+            Vector2 spawnPoint = 
+                UnityRandom.value >= 0.5f 
+                    ? new Vector2(randomXScreenSpace, towerTarget.position.y) 
+                    : new Vector2(-randomXScreenSpace, towerTarget.position.y);
             return spawnPoint;
         }
 
