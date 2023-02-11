@@ -2,73 +2,74 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityRandom = UnityEngine.Random;
+using System.Linq;
+using Cysharp.Threading.Tasks;
 
 namespace Game.Gameplay
 {
     public class VillagerSystem : MonoBehaviour
     {
         [Header("References")]
+        public VillagerFactory factory;
+        public Transform houseHolder;
         public Transform villagerHolder;
         public Transform towerTarget;
 
-        [Header("Settings")]
-        public Villager villagerPrefab;
-
+        private Dictionary<int, Vector2> _villagersRegisteredDict =
+            new Dictionary<int, Vector2>();
         private List<Villager> _villagers = new List<Villager>();
-        public List<Villager> villagers { get { return _villagers; } }
-        public int villagerAmount { get; private set; }
-        private int currentVillagerReachedTowerAmount = 0;
-        public event Action onAllVillagersReachedTower = delegate { };
+        public int VillagerAmount { get => _villagers.Count; }
 
-        public void Init()
-        {
-            villagerAmount = 0;
-        }
+        private float _towerXOffset = 2;
+        private float _edgeXOffset = 1;
+        private float _YSpawn = -2.5f;
 
         public Villager AddNewVillager()
         {
-            Villager newVillager = Instantiate(villagerPrefab, villagerHolder);
-            newVillager.Init(villagerHolder, towerTarget);
-            newVillager.onVillagerReachedTower += IncrementVillagerReachedTower;
+            Villager newVillager = factory.GenerateVillager(villagerHolder);
             _villagers.Add(newVillager);
-            villagerAmount++;
+            Vector2 home = PickRandomPointAsHome();
+            _villagersRegisteredDict.Add(newVillager.ID, home);
+            newVillager.transform.position = home;
             return newVillager;
         }
 
-        public void MoveVillagersToTower()
+        private Vector2 PickRandomPointAsHome()
         {
-            _villagers.ForEach(villager =>
-            {
-                villager.StartMoveTowardTower();
-            });
+            Vector2 worldSpaceMax = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0));
+            float randomXScreenSpace = UnityRandom.Range(_towerXOffset, worldSpaceMax.x - _edgeXOffset);
+            Vector2 spawnPoint = UnityRandom.value >= 0.5f ? new Vector2(randomXScreenSpace, _YSpawn) : new Vector2(-randomXScreenSpace, _YSpawn);
+            return spawnPoint;
         }
 
-        public void StartTowerWork()
+        public async UniTask MoveVillagersToTower()
         {
-            _villagers.ForEach(villager =>
-            {
-                villager.AnimateWork();
-            });
+            await UniTask
+                .WhenAll(_villagers.Select(x => x.MoveTo(towerTarget.position)));
+        }
+
+        public async UniTask StartTowerWork()
+        {
+            await UniTask
+                .WhenAll(_villagers.Select(x => x.AnimateWork()));
         }
 
         //Maybe eventually play an animation for this too, would add to immersion!
-        public void MoveVillagersHome()
+        public async UniTask MoveVillagersHome()
         {
-            _villagers.ForEach(villager =>
-            {
-                villager.ReturnHome();
-            });
-        }
-
-        public void IncrementVillagerReachedTower()
-        {
-            currentVillagerReachedTowerAmount++;
-
-            if (currentVillagerReachedTowerAmount >= villagerAmount)
-            {
-                onAllVillagersReachedTower.Invoke();
-                currentVillagerReachedTowerAmount = 0;
-            }
+            await UniTask
+                .WhenAll(_villagers.Select(x =>
+                {
+                    if (_villagersRegisteredDict.TryGetValue(x.ID, out Vector2 home))
+                    {
+                        return x.MoveTo(home);
+                    }
+                    else
+                    {
+                        return x.MoveTo(houseHolder.position);
+                    }
+                }));
         }
     }
 }

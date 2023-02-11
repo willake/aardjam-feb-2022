@@ -30,8 +30,6 @@ namespace Game.Gameplay
         public void Init()
         {
             buildingSystem.Init();
-            villagerSystem.Init();
-            villagerSystem.onAllVillagersReachedTower += EndMidday;
         }
 
         // prediction outcome phase
@@ -51,18 +49,10 @@ namespace Game.Gameplay
         {
             Debug.Log("Start Midday");
             await environmentSystem.SetState(DayState.Midday);
-            Debug.Log($"Increase 1 villager. Now is {villagerSystem.villagerAmount}");
-            await UniTask.Delay(TimeSpan.FromSeconds(middayVillagerAnimLength));
+            Debug.Log($"Increase 1 villager. Now is {villagerSystem.VillagerAmount}");
             //Move villagers
-            villagerSystem.MoveVillagersToTower();
-        }
-
-        async void EndMidday()
-        {
-            // play building animation
-            villagerSystem.StartTowerWork();
-            await UniTask.Delay(TimeSpan.FromSeconds(middayBuildingAnimLength));
-            // increase building height
+            await villagerSystem.MoveVillagersToTower();
+            await villagerSystem.StartTowerWork();
             buildingSystem.IncreaseFloor();
             Debug.Log($"Increase 1 floor. Now is {buildingSystem.Height}");
             StartNight();
@@ -74,7 +64,7 @@ namespace Game.Gameplay
             Debug.Log("Start Night");
             await environmentSystem.SetState(DayState.Night);
 
-            villagerSystem.MoveVillagersHome();
+            await villagerSystem.MoveVillagersHome();
 
             // open weather info UI
             PredictionPanel panel =
