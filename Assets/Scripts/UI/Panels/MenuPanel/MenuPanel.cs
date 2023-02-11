@@ -48,6 +48,7 @@ namespace Game.UI
         public override async UniTask OpenAsync()
         {
             gameObject.SetActive(true);
+            await UniTask.RunOnThreadPool(() => { });
         }
         public override void Close()
         {
@@ -56,6 +57,7 @@ namespace Game.UI
         public override async UniTask CloseAsync()
         {
             gameObject.SetActive(false);
+            await UniTask.RunOnThreadPool(() => { });
         }
 
         public void SwitchToMainGame()
