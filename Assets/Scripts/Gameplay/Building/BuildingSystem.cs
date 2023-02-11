@@ -14,6 +14,8 @@ namespace Game.Gameplay
         public GameObject normalPrefab;
 
         private List<BuildingBlock> _floors = new List<BuildingBlock>();
+        public List<BuildingBlock> floors { get { return _floors; } }
+
         public int Height { get; private set; }
 
         public void Init()
