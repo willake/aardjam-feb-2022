@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8717449105835988038}
   - component: {fileID: 6830657812283645623}
   m_Layer: 0
-  m_Name: normal
+  m_Name: mid-level-walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,3 +97,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteBuilding: {fileID: 0}
   spriteCompleted: {fileID: 0}
+  _type: 2

@@ -8,8 +8,6 @@ namespace Game.Gameplay
 {
     public class VillagerFactory : MonoBehaviour
     {
-        [Header("References")]
-        public GameObject villagerPrefab;
 
         //Maybe seperate some other time
         private float _normalSpeed = 3f;
@@ -19,7 +17,8 @@ namespace Game.Gameplay
         private int _increment = 0;
         public Villager GenerateVillager(Transform parent = null)
         {
-            GameObject go = Instantiate(villagerPrefab, parent);
+            GameObject go = Instantiate(
+                ResourceManager.instance.GameplayResources.Village.Villager, parent);
             Villager villager = go.GetComponent<Villager>();
             villager.Init(_increment, PickRandomSpeed());
 

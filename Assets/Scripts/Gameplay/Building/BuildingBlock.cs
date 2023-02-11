@@ -6,14 +6,13 @@ namespace Game.Gameplay
 {
     public class BuildingBlock : MonoBehaviour
     {
-        public enum State
-        {
-            Building,
-            Completed
-        }
         [Header("Settings")]
         public Sprite spriteBuilding;
         public Sprite spriteCompleted;
+
+        [SerializeField]
+        private BuildingBlockType _type;
+        public BuildingBlockType Type { get => _type; }
 
         private SpriteRenderer _renderer;
 
@@ -27,17 +26,23 @@ namespace Game.Gameplay
             return _renderer;
         }
 
-        public void SetState(State state)
+        // public void SetState(State state)
+        // {
+        //     switch (state)
+        //     {
+        //         case State.Building:
+        //             GetSpriteRenderer().sprite = spriteBuilding;
+        //             break;
+        //         case State.Completed:
+        //             GetSpriteRenderer().sprite = spriteCompleted;
+        //             break;
+        //     }
+        // }
+
+        public enum State
         {
-            switch (state)
-            {
-                case State.Building:
-                    GetSpriteRenderer().sprite = spriteBuilding;
-                    break;
-                case State.Completed:
-                    GetSpriteRenderer().sprite = spriteCompleted;
-                    break;
-            }
+            Building,
+            Completed
         }
     }
 }
