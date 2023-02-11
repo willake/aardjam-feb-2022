@@ -22,13 +22,18 @@ namespace Game.UI
         private WDButton[] _selectableButtons;
         private int _selectedIndex;
 
+        public bool enableKeyboardControl = false;
+
         private void Start()
         {
-            UIInputSet inputSet = InputManager.instance.UIInputSet;
-            inputSet.PressUpEvent.AddListener(KeyboardSelectPrev);
-            inputSet.PressDownEvent.AddListener(KeyboardSelectNext);
-            inputSet.PressConfirmEvent.AddListener(ClickSelectedButton);
-            inputSet.PressCancelEvent.AddListener(PerformCancelAction);
+            if (enableKeyboardControl)
+            {
+                UIInputSet inputSet = InputManager.instance.UIInputSet;
+                inputSet.PressUpEvent.AddListener(KeyboardSelectPrev);
+                inputSet.PressDownEvent.AddListener(KeyboardSelectNext);
+                inputSet.PressConfirmEvent.AddListener(ClickSelectedButton);
+                inputSet.PressCancelEvent.AddListener(PerformCancelAction);
+            }
         }
 
         public UIPanel OpenUI(AvailableUI ui)
@@ -92,6 +97,9 @@ namespace Game.UI
         private void SetFocusing(UIPanel panel)
         {
             _focusing = panel;
+
+            if (enableKeyboardControl == false) return;
+
             _selectableButtons = _focusing.GetSelectableButtons();
 
             if (_selectableButtons.Length == 0)
