@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
+using Cysharp.Threading.Tasks;
 using WillakeD.CommonPatterns;
 using System.Linq;
 using Game.Inputs;
@@ -9,7 +9,9 @@ namespace Game.UI
 {
     public class UIManager : Singleton<UIManager>
     {
+        [Header("references")]
         public Canvas canvas;
+        public GameObject inputBlocker;
 
         private Stack<UIPanel> _panelStack = new Stack<UIPanel>();
 
@@ -22,13 +24,18 @@ namespace Game.UI
         private WDButton[] _selectableButtons;
         private int _selectedIndex;
 
+        public bool enableKeyboardControl = false;
+
         private void Start()
         {
-            UIInputSet inputSet = InputManager.instance.UIInputSet;
-            inputSet.PressUpEvent.AddListener(KeyboardSelectPrev);
-            inputSet.PressDownEvent.AddListener(KeyboardSelectNext);
-            inputSet.PressConfirmEvent.AddListener(ClickSelectedButton);
-            inputSet.PressCancelEvent.AddListener(PerformCancelAction);
+            if (enableKeyboardControl)
+            {
+                UIInputSet inputSet = InputManager.instance.UIInputSet;
+                inputSet.PressUpEvent.AddListener(KeyboardSelectPrev);
+                inputSet.PressDownEvent.AddListener(KeyboardSelectNext);
+                inputSet.PressConfirmEvent.AddListener(ClickSelectedButton);
+                inputSet.PressCancelEvent.AddListener(PerformCancelAction);
+            }
         }
 
         public UIPanel OpenUI(AvailableUI ui)
@@ -38,8 +45,7 @@ namespace Game.UI
                 Debug.LogError("UI has been opened. There might be wrong implementation. ");
                 return null;
             }
-            UIPanel panel;
-            if (_panelPool.TryGetValue(ui, out panel) == false)
+            if (_panelPool.TryGetValue(ui, out UIPanel panel) == false)
             {
                 GameObject prefab = GetUIPrefab(ui);
                 if (prefab != null)
@@ -53,17 +59,50 @@ namespace Game.UI
             if (panel)
             {
                 _panelStack.Push(panel);
-                panel.Open();
                 panel.transform.SetAsLastSibling();
+                panel.Open();
                 SetFocusing(panel);
             }
 
             return panel;
         }
 
+        public async UniTask<UIPanel> OpenUIAsync(AvailableUI ui)
+        {
+            if (_openedUIList.Contains(ui))
+            {
+                Debug.LogError("UI has been opened. There might be wrong implementation. ");
+                return null;
+            }
+            if (_panelPool.TryGetValue(ui, out UIPanel panel) == false)
+            {
+                GameObject prefab = GetUIPrefab(ui);
+                if (prefab != null)
+                {
+                    GameObject go = Instantiate(prefab, canvas.transform);
+                    panel = go.GetComponent<UIPanel>();
+                    _openedUIList.Add(ui);
+                }
+            }
+
+            if (panel)
+            {
+                _panelStack.Push(panel);
+                panel.transform.SetAsLastSibling();
+                BlockUIInput();
+                await panel.OpenAsync();
+                SetFocusing(panel);
+            }
+            UnblockUIInput();
+            return panel;
+        }
+
         private void SetFocusing(UIPanel panel)
         {
             _focusing = panel;
+
+            if (enableKeyboardControl == false) return;
+
             _selectableButtons = _focusing.GetSelectableButtons();
 
             if (_selectableButtons.Length == 0)
@@ -83,11 +122,25 @@ namespace Game.UI
             while (_panelStack.Count > 0)
             {
                 UIPanel panel = _panelStack.Pop();
-                panel.CloseImmediately();
+                panel.Close();
                 _panelPool[panel.Type] = panel;
             }
 
             ClearUICache();
+        }
+
+        public async UniTask CloseAllUIAsync()
+        {
+            BlockUIInput();
+            while (_panelStack.Count > 0)
+            {
+                UIPanel panel = _panelStack.Pop();
+                await panel.CloseAsync();
+                _panelPool[panel.Type] = panel;
+            }
+
+            ClearUICache();
+            UnblockUIInput();
         }
 
         public void ClearUICache()
@@ -130,6 +183,18 @@ namespace Game.UI
             _panelPool[panel.Type] = panel;
 
             if (_panelStack.Count > 0) SetFocusing(_panelStack.Last());
+        }
+
+        public async UniTask PrevAsync()
+        {
+            BlockUIInput();
+            UIPanel panel = _panelStack.Pop();
+            await panel.CloseAsync();
+            _openedUIList.Remove(panel.Type);
+            _panelPool[panel.Type] = panel;
+
+            if (_panelStack.Count > 0) SetFocusing(_panelStack.Last());
+            UnblockUIInput();
         }
 
         private void KeyboardSelectPrev()
@@ -217,6 +282,19 @@ namespace Game.UI
         private void PerformCancelAction()
         {
             _focusing.PerformCancelAction();
+        }
+
+        private void BlockUIInput()
+        {
+            InputManager.instance.SetAllowInput(false);
+            inputBlocker.SetActive(true);
+            inputBlocker.transform.SetAsLastSibling();
+        }
+
+        private void UnblockUIInput()
+        {
+            InputManager.instance.SetAllowInput(true);
+            inputBlocker.SetActive(false);
         }
     }
 }

@@ -8,10 +8,19 @@ namespace Game.Inputs
     public class InputManager : Singleton<InputManager>
     {
         public UIInputSet UIInputSet;
+        public bool AllowInput { get; private set; }
 
         private void Update()
         {
-            UIInputSet.DetectInput();
+            if (AllowInput)
+            {
+                UIInputSet.DetectInput();
+            }
+        }
+
+        public void SetAllowInput(bool v)
+        {
+            AllowInput = v;
         }
     }
 }
