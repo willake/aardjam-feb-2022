@@ -31,7 +31,6 @@ namespace Game.Gameplay
             Vector2 home = PickRandomPointAsHome();
             _villagersRegisteredDict.Add(newVillager.ID, home);
             newVillager.transform.position = home;
-            Debug.Log("Home: " + home);
             return newVillager;
         }
 
