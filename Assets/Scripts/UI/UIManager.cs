@@ -115,6 +115,8 @@ namespace Game.UI
                     return ResourceManager.instance.UIPanelResources.menuPanel;
                 case AvailableUI.GameHUDPanel:
                     return ResourceManager.instance.UIPanelResources.gameHUDPanel;
+                case AvailableUI.PredictionPanel:
+                    return ResourceManager.instance.UIPanelResources.PredictionPanel;
                 default:
                     return null;
             }

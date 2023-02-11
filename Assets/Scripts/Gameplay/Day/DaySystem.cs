@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using DG.Tweening;
 using Game.Gameplay.Environments;
+using Game.UI;
 
 namespace Game.Gameplay
 {
@@ -56,6 +57,11 @@ namespace Game.Gameplay
             Debug.Log("Start Night");
             await environmentSystem.SetState(DayState.Night);
             // open weather info UI
+            PredictionPanel panel =
+                UIManager.instance.OpenUI(AvailableUI.PredictionPanel) as PredictionPanel;
+            await panel.ShowEndDayButton();
+            UIManager.instance.Prev();
+            StartDay();
             // wait for end day
         }
 

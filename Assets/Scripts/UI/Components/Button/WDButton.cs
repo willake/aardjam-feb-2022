@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UniRx;
 using System;
+using UnityEngine.Events;
+using Cysharp.Threading.Tasks;
 
 namespace Game.UI
 {
@@ -15,16 +17,10 @@ namespace Game.UI
         public bool IsInteractable { get => _isInteractable; }
         private bool _isHovered;
 
-        private Subject<Unit> _buttonDidClickSubject = new Subject<Unit>();
-        public IObservable<Unit> ButtonDidClick
+        public OnClickEvent onClick = new OnClickEvent();
+        public IObservable<Unit> OnClickObservable
         {
-            get => _buttonDidClickSubject
-            .AsObservable().ThrottleFirst(Consts.THROTTTLE_IN_SCEOND);
-        }
-        private Subject<Unit> _buttonWillClickSubject = new Subject<Unit>();
-        public IObservable<Unit> ButtonWillClick
-        {
-            get => _buttonWillClickSubject
+            get => onClick
             .AsObservable().ThrottleFirst(Consts.THROTTTLE_IN_SCEOND);
         }
 
@@ -81,15 +77,13 @@ namespace Game.UI
                 }
             }
 
-            _buttonDidClickSubject.OnNext(Unit.Default);
+            onClick.Invoke();
         }
 
         public void OnPointerDown(PointerEventData e)
         {
             if (_isInteractable == false) return;
             animator.SetState(WDButtonState.Click);
-
-            _buttonWillClickSubject.OnNext(Unit.Default);
         }
 
         public void Deselect()
@@ -104,7 +98,17 @@ namespace Game.UI
 
         public void Click()
         {
-            _buttonDidClickSubject.OnNext(Unit.Default);
+            onClick.Invoke();
+        }
+
+        public class OnClickEvent : UnityEvent { }
+    }
+
+    public static class WDButtonExtension
+    {
+        public static UniTask OnClickAsync(this WDButton button)
+        {
+            return new AsyncUnityEventHandler(button.onClick, button.GetCancellationTokenOnDestroy(), true).OnInvokeAsync();
         }
     }
 }

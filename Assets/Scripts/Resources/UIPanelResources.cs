@@ -16,5 +16,8 @@ namespace Game
         [Required("Must link a ui panel asset")]
         [AssetsOnly]
         public GameObject gameHUDPanel;
+        [Required("Must link a ui panel asset")]
+        [AssetsOnly]
+        public GameObject PredictionPanel;
     }
 }

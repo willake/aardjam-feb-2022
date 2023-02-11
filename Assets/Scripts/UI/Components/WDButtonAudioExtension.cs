@@ -18,7 +18,7 @@ namespace Game.UI
             }
 
             button
-                .ButtonWillClick
+                .OnClickObservable
                 .ObserveOnMainThread()
                 .Subscribe(_ => PlayAudio())
                 .AddTo(this);
