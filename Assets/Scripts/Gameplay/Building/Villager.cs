@@ -10,6 +10,7 @@ namespace Game.Gameplay
     {
         public int ID { get; private set; }
         public float Speed { get; private set; }
+        public string Name { get; private set; }
         // will add it back later
         //public VillagerType Type { get; private set; }
 
@@ -18,10 +19,11 @@ namespace Game.Gameplay
 
         private Tween _bounceTween;
 
-        public void Init(int id, float speed)
+        public void Init(int id, float speed, string name)
         {
             ID = id;
             Speed = speed;
+            Name = name;
         }
 
         public async UniTask MoveTo(Vector3 target, bool disappearOnTargetReached = false)

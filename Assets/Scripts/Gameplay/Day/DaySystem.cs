@@ -87,6 +87,7 @@ namespace Game.Gameplay
             await villagerSystem.MoveVillagersHome();
 
             forecastSystem.SetForecastedWeatherTomorrow();
+            forecastSystem.GenerateRiddle();
 
             // open weather info UI
             PredictionPanel panel =

@@ -7,9 +7,11 @@ namespace Game.Gameplay.Weathers
     public class ForecastSystem : MonoBehaviour
     {
         [Header("References")]
-        public WeatherFactory weatherFactory;
+        public VillagerSystem villagerSystem;
 
         [SerializeField] private List<DropTable<WeatherType>> weatherProbabilities;
+
+        private int villagerLimit = 2;
 
         public WeatherType currentForecastedWeatherType { get; private set; }
 
@@ -19,5 +21,11 @@ namespace Game.Gameplay.Weathers
             return currentForecastedWeatherType;
         }
 
+        public void GenerateRiddle()
+        {
+            GameObject go = Instantiate(
+                ResourceManager.instance.GameplayResources.Weathers.ForecastRiddle, this.transform);
+            go.GetComponent<ForecastRiddle>().GenerateForecastRiddle(currentForecastedWeatherType, villagerSystem.villagers, villagerLimit);
+        }
     }
 }

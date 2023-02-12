@@ -2515,25 +2515,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da3860e7fecacaa4f8ef2bb36ab42ed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weatherFactory: {fileID: 0}
+  villagerSystem: {fileID: 1194706078}
   weatherProbabilities:
   - item: 0
     probabilityWeight: 60
     probabilityRangeFrom: 0
     probabilityRangeTo: 0
   - item: 1
-    probabilityWeight: 20
+    probabilityWeight: 30
     probabilityRangeFrom: 0
     probabilityRangeTo: 0
   - item: 2
-    probabilityWeight: 10
-    probabilityRangeFrom: 0
-    probabilityRangeTo: 0
-  - item: 3
-    probabilityWeight: 20
-    probabilityRangeFrom: 0
-    probabilityRangeTo: 0
-  - item: 4
     probabilityWeight: 10
     probabilityRangeFrom: 0
     probabilityRangeTo: 0

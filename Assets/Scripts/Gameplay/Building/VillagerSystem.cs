@@ -19,6 +19,7 @@ namespace Game.Gameplay
         private Dictionary<int, Vector2> _villagersRegisteredDict =
             new Dictionary<int, Vector2>();
         private List<Villager> _villagers = new List<Villager>();
+        public List<Villager> villagers { get { return _villagers; } }
         public int VillagerAmount { get => _villagers.Count; }
 
         private float _towerXOffset = 2;

@@ -27,8 +27,9 @@ namespace Game.Gameplay.Weathers
     {
         Sunny,
         Rainy,
+        Thundering/*,
         Windy,
         Cloudy,
-        Foggy
+        Foggy*/
     }
 }

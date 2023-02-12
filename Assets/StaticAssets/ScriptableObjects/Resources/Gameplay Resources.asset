@@ -21,3 +21,4 @@ MonoBehaviour:
   Weathers:
     Sunny: {fileID: 6392946827616906603, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
     Rainy: {fileID: 4838783221692077954, guid: 1a3d5311747b0e740b47af6120710b1d, type: 3}
+    ForecastRiddle: {fileID: 780729483669850881, guid: 7af5087a927325a4b84812a55c185a3b, type: 3}

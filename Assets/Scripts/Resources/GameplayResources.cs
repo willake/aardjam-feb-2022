@@ -28,6 +28,7 @@ namespace Game
         {
             public GameObject Sunny;
             public GameObject Rainy;
+            public GameObject ForecastRiddle;
         }
     }
 }
