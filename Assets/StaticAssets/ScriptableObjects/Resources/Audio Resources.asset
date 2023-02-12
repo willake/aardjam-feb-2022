@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiAudios:
     ButtonClick:
-      clip: {fileID: 8300000, guid: d4d1cb9cdc25f5a4aa77a9cb56948402, type: 3}
-      volume: 1
+      clip: {fileID: 8300000, guid: 4ead74f1dc247c3459e00a5fffb4febd, type: 3}
+      volume: 0.1
   gameplayAudios:
     BellRing:
       clip: {fileID: 8300000, guid: 356c3cb54e2b75c45bfb8a79930b90c5, type: 3}
