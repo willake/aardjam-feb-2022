@@ -24,11 +24,15 @@ namespace Game.Gameplay
         public BuildingSystem buildingSystem;
         public VillagerSystem villagerSystem;
         public WeatherSystem weatherSystem;
+        public ForecastSystem forecastSystem;
 
         private GameHUDPanel _gameHUDPanel;
 
+        private int currentDay;
+
         public void Init()
         {
+            currentDay = 0;
             buildingSystem.Init();
             gameCamera.LookAt(buildingSystem.GetTowerTopPos());
             gameCamera.Zoom(1.5f);
@@ -41,12 +45,14 @@ namespace Game.Gameplay
         // prediction outcome phase
         public async void StartDay()
         {
-            Debug.Log("Start Day");
-            Debug.Log("Today is sunny");
-            weatherSystem.SetWeather(WeatherType.Sunny);
+            if (currentDay != 0)
+                weatherSystem.SetWeather(forecastSystem.currentForecastedWeatherType);
+            else
+                weatherSystem.SetWeather(WeatherType.Sunny);
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.dayColor);
             await _gameHUDPanel.SetTimeAsync(DayState.Day);
             await weatherSystem.Weather.OnEnterDay();
+            villagerSystem.AppearVillagers();
             villagerSystem.AddNewVillager();
             // play weather animation
             await weatherSystem.Weather.OnExitDay();
@@ -87,11 +93,19 @@ namespace Game.Gameplay
 
             await villagerSystem.MoveVillagersHome();
 
+            ForecastRiddle currentRiddle;
+
+            forecastSystem.SetForecastedWeatherTomorrow();
+            currentRiddle = forecastSystem.GenerateRiddle(currentDay == 0);
+
             // open weather info UI
             PredictionPanel panel =
                 await UIManager.instance.OpenUIAsync(AvailableUI.PredictionPanel) as PredictionPanel;
+            panel.SetForecast(currentRiddle);
             await panel.ShowEndDayButton();
             UIManager.instance.Prev();
+
+            currentDay++;
 
             await weatherSystem.Weather.OnExitNight();
             StartDay();

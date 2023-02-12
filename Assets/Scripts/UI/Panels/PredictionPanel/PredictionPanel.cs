@@ -5,6 +5,8 @@ using Game.Events;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using DG.Tweening;
+using TMPro;
+using Game.Gameplay.Weathers;
 
 namespace Game.UI
 {
@@ -15,6 +17,9 @@ namespace Game.UI
         [Title("References")]
         public GameObject panelWeather;
         public WDButton btnEndDay;
+        public TextMeshProUGUI weatherForecasterStatement;
+        public TextMeshProUGUI weatherForecasterName;
+        public Transform villagerRiddleHolder;
 
         public override WDButton[] GetSelectableButtons()
         {
@@ -41,6 +46,11 @@ namespace Game.UI
         }
         public override void Close()
         {
+            foreach (Transform t in villagerRiddleHolder)
+            {
+                GameObject.Destroy(t.gameObject);
+            }
+
             gameObject.SetActive(false);
         }
         public override async UniTask CloseAsync()
@@ -54,6 +64,27 @@ namespace Game.UI
             btnEndDay.gameObject.SetActive(true);
             await btnEndDay.OnClickAsync();
             btnEndDay.gameObject.SetActive(false);
+        }
+
+        public void SetForecast(ForecastRiddle riddle)
+        {
+            weatherForecasterName.text = riddle.weatherRiddle.toldBy.Name;
+            weatherForecasterStatement.text = riddle.GenerateWeatherPredictionText();
+
+            //Instead of iterating over, for now just add two riddles manually.
+            if (riddle.firstvillagerRiddle != null)
+            {
+                VillagerRiddle_UI villagerRiddle = Instantiate(
+                    ResourceManager.instance.GameplayResources.Weathers.VillagerRiddleUI, villagerRiddleHolder);
+                villagerRiddle.SetValues(riddle.firstvillagerRiddle.toldBy.Name, riddle.GenerateVillagerRiddleText(riddle.firstvillagerRiddle), (riddle.firstvillagerRiddle.statementCredibility == RiddleElement.StatementCredibility.Lie));
+            }
+
+            if (riddle.secondvillagerRiddle != null)
+            {
+                VillagerRiddle_UI villagerRiddle = Instantiate(
+                    ResourceManager.instance.GameplayResources.Weathers.VillagerRiddleUI, villagerRiddleHolder);
+                villagerRiddle.SetValues(riddle.secondvillagerRiddle.toldBy.Name, riddle.GenerateVillagerRiddleText(riddle.secondvillagerRiddle), (riddle.secondvillagerRiddle.statementCredibility == RiddleElement.StatementCredibility.Lie));
+            }
         }
 
         private void OnDestroy()

@@ -9,6 +9,7 @@ namespace Game.Gameplay.Weathers
         [Header("References")]
         public WeatherFactory weatherFactory;
         public Weather Weather { get; private set; }
+
         public void SetWeather(WeatherType weatherType)
         {
             if (Weather != null)
@@ -26,8 +27,9 @@ namespace Game.Gameplay.Weathers
     {
         Sunny,
         Rainy,
+        Thundering/*,
         Windy,
         Cloudy,
-        Foggy
+        Foggy*/
     }
 }
