@@ -19,6 +19,7 @@ namespace Game.UI
         public WDTextButton btnPlay;
         public WDTextButton btnSettings;
         public WDTextButton btnExit;
+        public WDText textVersion;
 
         void Start()
         {
@@ -44,6 +45,7 @@ namespace Game.UI
                 .AddTo(this);
 
             btnPlay.SetText("Play");
+            textVersion.SetText(Consts.VERSION);
         }
 
         public override WDButton[] GetSelectableButtons()
