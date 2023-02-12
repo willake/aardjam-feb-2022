@@ -43,7 +43,7 @@ namespace Game.Gameplay
         {
             Debug.Log("Start Day");
             Debug.Log("Today is sunny");
-            weatherSystem.SetWeather(WeatherType.Rainy);
+            weatherSystem.SetWeather(WeatherType.Sunny);
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.dayColor);
             await _gameHUDPanel.SetTimeAsync(DayState.Day);
             await weatherSystem.Weather.OnEnterDay();

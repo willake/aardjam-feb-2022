@@ -29,7 +29,7 @@ namespace Game.Gameplay.Weathers
             return transform.DOMoveY(riseHieght, duration).SetEase(ease);
         }
 
-        public Tween Dawn()
+        public Tween Down()
         {
             return transform.DOMoveY(dawnHieght, duration).SetEase(ease);
         }
@@ -37,7 +37,7 @@ namespace Game.Gameplay.Weathers
         public enum State
         {
             Rise,
-            Dawn
+            Down
         }
     }
 }
