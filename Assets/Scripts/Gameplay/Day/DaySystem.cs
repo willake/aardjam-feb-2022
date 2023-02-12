@@ -71,19 +71,31 @@ namespace Game.Gameplay
             Debug.Log($"Increase 1 villager. Now is {villagerSystem.VillagerAmount}");
             //Move villagers
             await villagerSystem.MoveVillagersToTower();
-            await villagerSystem.StartTowerWork();
-            buildingSystem.IncreaseFloor();
-            _gameHUDPanel.SetFloor(buildingSystem.Floor);
-            Debug.Log($"Increase 1 floor. Now is {buildingSystem.Floor}");
 
-            Sequence sequence = DOTween.Sequence();
-
-            sequence
-                .Append(gameCamera.LookAtAsync(buildingSystem.GetTowerTopPos()))
-                .Join(gameCamera.ZoomAsync(buildingSystem.Height));
+            await HandleWeatherEffects();
 
             await weatherSystem.Weather.OnExitMidday();
             StartNight();
+        }
+
+        async UniTask HandleWeatherEffects()
+        {
+            if (weatherSystem.Weather.WeatherType == WeatherType.Sunny)
+            {
+                await villagerSystem.StartTowerWork();
+                buildingSystem.IncreaseFloor();
+                Debug.Log($"Increase 1 floor. Now is {buildingSystem.Floor}");
+
+                Sequence sequence = DOTween.Sequence();
+
+                sequence
+                    .Append(gameCamera.LookAtAsync(buildingSystem.GetTowerTopPos()))
+                    .Join(gameCamera.ZoomAsync(buildingSystem.Height));
+            }
+            else if (weatherSystem.Weather.WeatherType == WeatherType.Rainy || weatherSystem.Weather.WeatherType == WeatherType.Thundering)
+            {
+                await villagerSystem.EliminateVillagers();
+            }
         }
 
         // prediction phase

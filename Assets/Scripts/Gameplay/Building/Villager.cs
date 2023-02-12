@@ -65,6 +65,21 @@ namespace Game.Gameplay
             transform.position = pos;
         }
 
+        public async UniTask AnimateElimination()
+        {
+            var firstTarget = new Vector2(Random.Range(transform.position.x + 2, transform.position.x - 2), Random.Range(transform.position.y + 2, transform.position.y + 3));
+            float distanceY = Mathf.Abs(firstTarget.y - transform.position.y);
+
+            await transform
+                .DOMove(firstTarget, distanceY / 10).SetEase(Ease.Linear).AsyncWaitForCompletion();
+
+            var secondTarget = new Vector2(Random.Range(transform.position.x + 2, transform.position.x - 2), -5);
+            distanceY = Mathf.Abs(secondTarget.y - transform.position.y);
+
+            await transform
+                .DOMove(secondTarget, distanceY / 15).SetEase(Ease.Linear).AsyncWaitForCompletion();
+        }
+
         public void AnimateVisibleToggle(bool toggle = true)
         {
             _animator.SetBool("isVisible", toggle);

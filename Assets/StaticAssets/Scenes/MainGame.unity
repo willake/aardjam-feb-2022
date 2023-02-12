@@ -2417,7 +2417,7 @@ MonoBehaviour:
     probabilityRangeFrom: 0
     probabilityRangeTo: 0
   - item: 1
-    probabilityWeight: 30
+    probabilityWeight: 20
     probabilityRangeFrom: 0
     probabilityRangeTo: 0
   - item: 2

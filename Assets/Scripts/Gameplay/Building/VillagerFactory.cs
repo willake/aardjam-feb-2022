@@ -28,6 +28,12 @@ namespace Game.Gameplay
             return villager;
         }
 
+        public void RemoveVillager(Villager villager)
+        {
+            _increment--;
+            GameObject.Destroy(villager.gameObject);
+        }
+
         private float PickRandomSpeed()
         {
             float randomType = UnityRandom.Range(0f, 1f);

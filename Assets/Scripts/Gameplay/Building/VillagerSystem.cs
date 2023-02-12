@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityRandom = UnityEngine.Random;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using Sirenix.Utilities;
 
 namespace Game.Gameplay
 {
@@ -25,6 +26,7 @@ namespace Game.Gameplay
         private float _towerXOffset = 2;
         private float _randTowerOffset = 1;
         private float _edgeXOffset = 1;
+        private int villagerRainDeathsMin = 1, villagerRainDeathsMax = 3;
 
         public Villager AddNewVillager()
         {
@@ -94,6 +96,28 @@ namespace Game.Gameplay
                         return x.MoveTo(houseHolder.position, true);
                     }
                 }));
+        }
+
+        public async UniTask EliminateVillagers()
+        {
+            int villagersToEliminate = _villagers.Count > villagerRainDeathsMax ?
+                UnityRandom.Range(villagerRainDeathsMin, villagerRainDeathsMax) :
+                villagerRainDeathsMin;
+
+            var shuffledVillagers = RandShuffle<Villager>.Shuffle(villagers).Take(villagersToEliminate);
+
+            await UniTask
+                .WhenAll(shuffledVillagers.Select(x =>
+                {
+                    return x.AnimateElimination();
+                }));
+
+            shuffledVillagers.ForEach(x =>
+            {
+                _villagersRegisteredDict.Remove(x.ID);
+                factory.RemoveVillager(x);
+                _villagers.Remove(x);
+            });
         }
 
         public void AppearVillagers()
