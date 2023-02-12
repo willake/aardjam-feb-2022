@@ -17,9 +17,34 @@ namespace Game.UI
         [Title("References")]
         public GameObject panelWeather;
         public WDButton btnEndDay;
-        public TextMeshProUGUI weatherForecasterStatement;
-        public TextMeshProUGUI weatherForecasterName;
+        public WDText weatherForecasterStatement;
+        public WDText weatherForecasterName;
         public Transform villagerRiddleHolder;
+        public RingBellButton btnRing;
+        private bool _ringTheBall;
+
+        private void Start()
+        {
+            btnRing
+                .OnClickObservable
+                .ObserveOnMainThread()
+                .Subscribe(_ => ToggleBell())
+                .AddTo(this);
+        }
+
+        private void ToggleBell()
+        {
+            if (_ringTheBall)
+            {
+                _ringTheBall = false;
+                btnRing.SetButtonState(false);
+            }
+            else
+            {
+                _ringTheBall = true;
+                btnRing.SetButtonState(true);
+            }
+        }
 
         public override WDButton[] GetSelectableButtons()
         {
@@ -33,10 +58,14 @@ namespace Game.UI
 
         public override void Open()
         {
+            _ringTheBall = false;
+            btnRing.SetButtonState(false);
             gameObject.SetActive(true);
         }
         public override async UniTask OpenAsync()
         {
+            _ringTheBall = false;
+            btnRing.SetButtonState(false);
             gameObject.SetActive(true);
             panelWeather.transform.localScale =
                 new Vector3(1, 0, 1);
@@ -59,17 +88,20 @@ namespace Game.UI
             await UniTask.RunOnThreadPool(() => { });
         }
 
-        public async UniTask ShowEndDayButton()
+        public async UniTask<bool> ShowEndDayButton()
         {
             btnEndDay.gameObject.SetActive(true);
             await btnEndDay.OnClickAsync();
             btnEndDay.gameObject.SetActive(false);
+
+            return _ringTheBall;
         }
 
         public void SetForecast(ForecastRiddle riddle)
         {
-            weatherForecasterName.text = riddle.weatherRiddle.toldBy.Name;
-            weatherForecasterStatement.text = riddle.GenerateWeatherPredictionText();
+
+            weatherForecasterName.SetText(riddle.weatherRiddle.toldBy.Name);
+            weatherForecasterStatement.SetText(riddle.GenerateWeatherPredictionText());
 
             //Instead of iterating over, for now just add two riddles manually.
             if (riddle.firstvillagerRiddle != null)
