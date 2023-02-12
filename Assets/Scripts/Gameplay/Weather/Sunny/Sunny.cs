@@ -10,19 +10,23 @@ namespace Game.Gameplay.Weathers
         [Header("References")]
         public Sun sun;
         public Moon moon;
-        public GameObject stars;
+        public GameObject staticStars;
+        public GameObject dynamicStars;
 
         public override void Init()
         {
             sun.SetHieght(Sun.State.Dawn);
             moon.SetHieght(Moon.State.Down);
-            stars.gameObject.SetActive(false);
+            staticStars.gameObject.SetActive(false);
+            dynamicStars.gameObject.SetActive(false);
         }
 
         public override async UniTask OnEnterDay()
         {
             // sun on;
             await sun.Rise().AsyncWaitForCompletion();
+            staticStars.gameObject.SetActive(false);
+            dynamicStars.gameObject.SetActive(false);
         }
 
         public override async UniTask OnExitDay()
@@ -45,7 +49,8 @@ namespace Game.Gameplay.Weathers
 
         public override async UniTask OnEnterNight()
         {
-            stars.gameObject.SetActive(true);
+            staticStars.gameObject.SetActive(true);
+            dynamicStars.gameObject.SetActive(true);
             await moon.Rise().AsyncWaitForCompletion();
             // sun down
         }
@@ -54,7 +59,6 @@ namespace Game.Gameplay.Weathers
         {
             // nothing
             await moon.Down().AsyncWaitForCompletion();
-            stars.gameObject.SetActive(false);
         }
     }
 }

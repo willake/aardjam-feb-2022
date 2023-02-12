@@ -45,3 +45,12 @@ TagManager:
   - name: Sky
     uniqueID: 2286165007
     locked: 0
+  - name: Back Light Sources
+    uniqueID: 1678580159
+    locked: 0
+  - name: Environment
+    uniqueID: 3769650881
+    locked: 0
+  - name: Front Light Sources
+    uniqueID: 3366593403
+    locked: 0
