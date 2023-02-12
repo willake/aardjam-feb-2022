@@ -3,33 +3,24 @@ using System;
 using Cysharp.Threading.Tasks;
 using Game.Events;
 using Sirenix.OdinInspector;
+using Game.Gameplay;
+using DG.Tweening;
 
 namespace Game.UI
 {
     public class GameHUDPanel : UIPanel
     {
         public override AvailableUI Type { get => AvailableUI.GameHUDPanel; }
-        private Lazy<EventManager> _eventManager = new Lazy<EventManager>(
-            () => DIContainer.instance.GetObject<EventManager>(),
-            true
-        );
-        protected EventManager EventManager { get => _eventManager.Value; }
 
         [Title("References")]
-        public WDButton btnMenu;
-
-        void Start()
-        {
-            btnMenu
-                .OnClickObservable
-                .ObserveOnMainThread()
-                .Subscribe(_ => SwitchToMainGame())
-                .AddTo(this);
-        }
+        public WDButton btnSettings;
+        public WDText textDay;
+        public WDText textFloor;
+        public Clock clock;
 
         public override WDButton[] GetSelectableButtons()
         {
-            return new WDButton[] { btnMenu };
+            return new WDButton[] { };
         }
 
         public override void PerformCancelAction()
@@ -56,14 +47,19 @@ namespace Game.UI
             await UniTask.RunOnThreadPool(() => { });
         }
 
-        public void SwitchToMainGame()
+        public void SetTime(DayState dayState)
         {
-            GameManager.instance.SwitchScene(AvailableScene.Menu);
+            clock.SetTime(dayState);
+        }
+
+        public async UniTask SetTimeAsync(DayState dayState)
+        {
+            await clock.SetTimeAsync(dayState).AsyncWaitForCompletion();
         }
 
         private void OnDestroy()
         {
-            btnMenu.StopAnimation();
+            btnSettings.StopAnimation();
         }
     }
 }

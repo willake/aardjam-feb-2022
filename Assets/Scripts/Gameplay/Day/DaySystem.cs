@@ -25,16 +25,17 @@ namespace Game.Gameplay
         public VillagerSystem villagerSystem;
         public WeatherSystem weatherSystem;
 
-        private const float dayAnimLength = 2f;
-        private const float middayVillagerAnimLength = 2f;
-        private const float middayBuildingAnimLength = 3f;
-        private const float nightAnimLength = 3f;
+        private GameHUDPanel _gameHUDPanel;
 
         public void Init()
         {
             buildingSystem.Init();
             gameCamera.LookAt(buildingSystem.GetTowerTopPos());
             gameCamera.Zoom(1.5f);
+
+            _gameHUDPanel = UIManager.instance
+                .OpenUI(AvailableUI.GameHUDPanel) as GameHUDPanel;
+            _gameHUDPanel.SetTime(DayState.Day);
         }
 
         // prediction outcome phase
@@ -44,6 +45,7 @@ namespace Game.Gameplay
             Debug.Log("Today is sunny");
             weatherSystem.SetWeather(WeatherType.Sunny);
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.dayColor);
+            await _gameHUDPanel.SetTimeAsync(DayState.Day);
             await weatherSystem.Weather.OnEnterDay();
             villagerSystem.AddNewVillager();
             // play weather animation
@@ -56,6 +58,7 @@ namespace Game.Gameplay
         {
             Debug.Log("Start Midday");
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.middayColor);
+            await _gameHUDPanel.SetTimeAsync(DayState.Midday);
             await weatherSystem.Weather.OnEnterMidday();
             Debug.Log($"Increase 1 villager. Now is {villagerSystem.VillagerAmount}");
             //Move villagers
@@ -80,6 +83,7 @@ namespace Game.Gameplay
             Debug.Log("Start Night");
             await weatherSystem.Weather.OnEnterNight();
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.nightColor);
+            await _gameHUDPanel.SetTimeAsync(DayState.Night);
 
             await villagerSystem.MoveVillagersHome();
 

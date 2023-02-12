@@ -13,7 +13,6 @@ namespace Game.Gameplay
         public DaySystem daySystem;
         async void Start()
         {
-            UIManager.instance.OpenUI(AvailableUI.GameHUDPanel);
             daySystem.Init();
             await PlayIntro();
             daySystem.StartDay();
