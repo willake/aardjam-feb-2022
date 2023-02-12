@@ -13,20 +13,27 @@ namespace Game.Gameplay
         private List<BuildingBlock> _floors = new List<BuildingBlock>();
         public List<BuildingBlock> floors { get { return _floors; } }
 
-        public int Height { get; private set; }
+        public int Floor { get; private set; }
+        public float Height { get; private set; }
 
         public void Init()
         {
-            Height = 0;
+            Floor = 0;
             _floors.Add(
                 factory.GenerateBuildingBlock(BuildingBlockType.TopLevel, buildingBase)
             );
-            UpdateFloors();
+            Height = UpdateFloors();
+        }
+
+        public Vector2 GetTowerTopPos()
+        {
+            return buildingBase.position
+                + new Vector3(0, Height - (GetBuildingHeight(BuildingBlockType.TopLevel) / 2), 0);
         }
 
         public void IncreaseFloor()
         {
-            Height += 1;
+            Floor += 1;
             int r = Random.Range(0, 2);
 
             if (r > 0)
@@ -43,10 +50,10 @@ namespace Game.Gameplay
                         BuildingBlockType.MidLevelWalls,
                         buildingBase));
             }
-            UpdateFloors();
+            Height = UpdateFloors();
         }
 
-        private void UpdateFloors()
+        private float UpdateFloors()
         {
             float height = 0;
             for (int i = _floors.Count - 1; i >= 0; i--)
@@ -55,6 +62,8 @@ namespace Game.Gameplay
                     buildingBase.position + new Vector3(0, height, i * 0.001f);
                 height += GetBuildingHeight(_floors[i].Type);
             }
+
+            return height;
         }
 
         private float GetBuildingHeight(BuildingBlockType type)

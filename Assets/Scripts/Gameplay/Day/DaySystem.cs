@@ -19,16 +19,14 @@ namespace Game.Gameplay
     public class DaySystem : MonoBehaviour
     {
         [Header("References")]
+        public GameCamera gameCamera;
         public EnvironmentSystem environmentSystem;
         public BuildingSystem buildingSystem;
         public VillagerSystem villagerSystem;
         public WeatherSystem weatherSystem;
         public ForecastSystem forecastSystem;
 
-        private const float dayAnimLength = 2f;
-        private const float middayVillagerAnimLength = 2f;
-        private const float middayBuildingAnimLength = 3f;
-        private const float nightAnimLength = 3f;
+        private GameHUDPanel _gameHUDPanel;
 
         private int currentDay;
 
@@ -36,6 +34,12 @@ namespace Game.Gameplay
         {
             currentDay = 0;
             buildingSystem.Init();
+            gameCamera.LookAt(buildingSystem.GetTowerTopPos());
+            gameCamera.Zoom(1.5f);
+
+            _gameHUDPanel = UIManager.instance
+                .OpenUI(AvailableUI.GameHUDPanel) as GameHUDPanel;
+            _gameHUDPanel.SetTime(DayState.Day);
         }
 
         // prediction outcome phase
@@ -47,6 +51,7 @@ namespace Game.Gameplay
                 weatherSystem.SetWeather(WeatherType.Sunny);
 
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.dayColor);
+            await _gameHUDPanel.SetTimeAsync(DayState.Day);
             await weatherSystem.Weather.OnEnterDay();
             villagerSystem.AppearVillagers();
             villagerSystem.AddNewVillager();
@@ -60,13 +65,20 @@ namespace Game.Gameplay
         {
             Debug.Log("Start Midday");
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.middayColor);
+            await _gameHUDPanel.SetTimeAsync(DayState.Midday);
             await weatherSystem.Weather.OnEnterMidday();
             Debug.Log($"Increase 1 villager. Now is {villagerSystem.VillagerAmount}");
             //Move villagers
             await villagerSystem.MoveVillagersToTower();
             await villagerSystem.StartTowerWork();
             buildingSystem.IncreaseFloor();
-            Debug.Log($"Increase 1 floor. Now is {buildingSystem.Height}");
+            Debug.Log($"Increase 1 floor. Now is {buildingSystem.Floor}");
+
+            Sequence sequence = DOTween.Sequence();
+
+            sequence
+                .Append(gameCamera.LookAtAsync(buildingSystem.GetTowerTopPos()))
+                .Join(gameCamera.ZoomAsync(buildingSystem.Height));
 
             await weatherSystem.Weather.OnExitMidday();
             StartNight();
@@ -78,6 +90,7 @@ namespace Game.Gameplay
             Debug.Log("Start Night");
             await weatherSystem.Weather.OnEnterNight();
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.nightColor);
+            await _gameHUDPanel.SetTimeAsync(DayState.Night);
 
             await villagerSystem.MoveVillagersHome();
 

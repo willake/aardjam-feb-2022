@@ -13,7 +13,6 @@ namespace Game.Gameplay
         public DaySystem daySystem;
         async void Start()
         {
-            UIManager.instance.OpenUI(AvailableUI.GameHUDPanel);
             daySystem.Init();
             await PlayIntro();
             daySystem.StartDay();
@@ -22,6 +21,20 @@ namespace Game.Gameplay
         async UniTask PlayIntro()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(2));
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                GameManager.instance.PauseGame();
+                OpenPausePanel();
+            }
+        }
+
+        private void OpenPausePanel()
+        {
+            UIManager.instance.OpenUIAsync(AvailableUI.PausePanel).Forget();
         }
     }
 }
