@@ -4,6 +4,7 @@ namespace Game.UI
     {
         MenuPanel,
         GameHUDPanel,
-        PredictionPanel
+        PredictionPanel,
+        PausePanel
     }
 }
