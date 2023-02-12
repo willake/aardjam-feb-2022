@@ -7,20 +7,19 @@ namespace Game.Gameplay
     public class BuildingSystem : MonoBehaviour
     {
         [Header("References")]
+        public BuildingBlockFactory factory;
         public Transform buildingBase;
 
-        [Header("Settings")]
-        public GameObject bellPrefab;
-        public GameObject normalPrefab;
-
         private List<BuildingBlock> _floors = new List<BuildingBlock>();
+        public List<BuildingBlock> floors { get { return _floors; } }
+
         public int Height { get; private set; }
 
         public void Init()
         {
             Height = 0;
             _floors.Add(
-                GenerateBuildingBlock(BuildingBlockType.Bell)
+                factory.GenerateBuildingBlock(BuildingBlockType.TopLevel, buildingBase)
             );
             UpdateFloors();
         }
@@ -28,51 +27,45 @@ namespace Game.Gameplay
         public void IncreaseFloor()
         {
             Height += 1;
-            _floors.Add(
-                GenerateBuildingBlock(BuildingBlockType.Normal)
-            );
-            UpdateFloors();
-        }
+            int r = Random.Range(0, 2);
 
-        private BuildingBlock GenerateBuildingBlock(BuildingBlockType type)
-        {
-            switch (type)
+            if (r > 0)
             {
-                case BuildingBlockType.Bell:
-                default:
-                    GameObject bellGo = Instantiate(
-                        bellPrefab,
-                        Vector3.zero,
-                        Quaternion.identity, buildingBase);
-                    return bellGo.GetComponent<BuildingBlock>();
-                case BuildingBlockType.Normal:
-                    GameObject normalGo = Instantiate(
-                        normalPrefab,
-                        Vector3.zero,
-                        Quaternion.identity, buildingBase);
-                    return normalGo.GetComponent<BuildingBlock>();
+                _floors.Add(
+                    factory.GenerateBuildingBlock(
+                        BuildingBlockType.MidLevelEmpty,
+                        buildingBase));
             }
+            else
+            {
+                _floors.Add(
+                    factory.GenerateBuildingBlock(
+                        BuildingBlockType.MidLevelWalls,
+                        buildingBase));
+            }
+            UpdateFloors();
         }
 
         private void UpdateFloors()
         {
+            float height = 0;
             for (int i = _floors.Count - 1; i >= 0; i--)
             {
                 _floors[i].transform.position =
-                    buildingBase.position + CalculateBuildingHeight(
-                        _floors.Count - 1 - i);
+                    buildingBase.position + new Vector3(0, height, i * 0.001f);
+                height += GetBuildingHeight(_floors[i].Type);
             }
         }
 
-        private Vector3 CalculateBuildingHeight(int floor)
+        private float GetBuildingHeight(BuildingBlockType type)
         {
-            return new Vector3(0, floor * 1f, 0);
-        }
-
-        public enum BuildingBlockType
-        {
-            Bell,
-            Normal
+            switch (type)
+            {
+                case BuildingBlockType.TopLevel: return 1.1875f;
+                case BuildingBlockType.MidLevelEmpty: return 0.6875f;
+                case BuildingBlockType.MidLevelWalls: return 0.7283f;
+                default: return 1;
+            }
         }
     }
 }
