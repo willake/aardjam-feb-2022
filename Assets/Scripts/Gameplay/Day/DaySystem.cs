@@ -42,14 +42,9 @@ namespace Game.Gameplay
         public async void StartDay()
         {
             if (currentDay != 0)
-            {
-                Debug.Log(forecastSystem.currentForecastedWeatherType);
                 weatherSystem.SetWeather(forecastSystem.currentForecastedWeatherType);
-            }
             else
-            {
                 weatherSystem.SetWeather(WeatherType.Sunny);
-            }
 
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.dayColor);
             await weatherSystem.Weather.OnEnterDay();
@@ -86,12 +81,18 @@ namespace Game.Gameplay
 
             await villagerSystem.MoveVillagersHome();
 
+            ForecastRiddle currentRiddle;
+
             forecastSystem.SetForecastedWeatherTomorrow();
-            forecastSystem.GenerateRiddle();
+            if (currentDay != 0)
+                currentRiddle = forecastSystem.GenerateRiddle();
+            else
+                currentRiddle = forecastSystem.GenerateRiddle(true);
 
             // open weather info UI
             PredictionPanel panel =
                 await UIManager.instance.OpenUIAsync(AvailableUI.PredictionPanel) as PredictionPanel;
+            panel.SetForecast(currentRiddle);
             await panel.ShowEndDayButton();
             UIManager.instance.Prev();
 

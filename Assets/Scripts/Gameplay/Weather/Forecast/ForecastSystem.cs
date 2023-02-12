@@ -21,11 +21,17 @@ namespace Game.Gameplay.Weathers
             return currentForecastedWeatherType;
         }
 
-        public void GenerateRiddle()
+        public ForecastRiddle GenerateRiddle(bool firstTime = false)
         {
-            GameObject go = Instantiate(
+            ForecastRiddle forecastRiddle = Instantiate(
                 ResourceManager.instance.GameplayResources.Weathers.ForecastRiddle, this.transform);
-            go.GetComponent<ForecastRiddle>().GenerateForecastRiddle(currentForecastedWeatherType, villagerSystem.villagers, villagerLimit);
+
+            if (!firstTime)
+                forecastRiddle.GenerateForecastRiddle(currentForecastedWeatherType, villagerSystem.villagers, villagerLimit);
+            else
+                forecastRiddle.GenerateFirstForecastRiddle(currentForecastedWeatherType, villagerSystem.villagers);
+
+            return forecastRiddle;
         }
     }
 }

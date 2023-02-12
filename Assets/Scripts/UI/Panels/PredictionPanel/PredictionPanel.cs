@@ -5,6 +5,8 @@ using Game.Events;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using DG.Tweening;
+using TMPro;
+using Game.Gameplay.Weathers;
 
 namespace Game.UI
 {
@@ -15,6 +17,8 @@ namespace Game.UI
         [Title("References")]
         public GameObject panelWeather;
         public WDButton btnEndDay;
+        public TextMeshProUGUI weatherForecasterStatement;
+        public TextMeshProUGUI weatherForecasterName;
 
         public override WDButton[] GetSelectableButtons()
         {
@@ -54,6 +58,12 @@ namespace Game.UI
             btnEndDay.gameObject.SetActive(true);
             await btnEndDay.OnClickAsync();
             btnEndDay.gameObject.SetActive(false);
+        }
+
+        public void SetForecast(ForecastRiddle riddle)
+        {
+            weatherForecasterName.text = riddle.weatherRiddle.toldBy.Name;
+            weatherForecasterStatement.text = riddle.GenerateWeatherString();
         }
 
         private void OnDestroy()

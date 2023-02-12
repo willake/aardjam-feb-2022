@@ -1,6 +1,7 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
 using WillakeD.ScenePropertyDrawler;
+using Game.Gameplay.Weathers;
 
 namespace Game
 {
@@ -28,7 +29,7 @@ namespace Game
         {
             public GameObject Sunny;
             public GameObject Rainy;
-            public GameObject ForecastRiddle;
+            public ForecastRiddle ForecastRiddle;
         }
     }
 }
