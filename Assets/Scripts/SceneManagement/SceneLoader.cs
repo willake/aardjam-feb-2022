@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using WillakeD.ScenePropertyDrawler;
 using System;
+using DG.Tweening;
 
 namespace Game
 {
@@ -27,6 +28,8 @@ namespace Game
             string sceneName = GetSceneName(scene);
 
             _loaderWillLoadSceneSubject.OnNext(sceneName);
+
+            DOTween.KillAll();
 
             await LoadScene(sceneName);
 

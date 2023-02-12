@@ -18,6 +18,19 @@ namespace Game.UI
         public WDText textFloor;
         public Clock clock;
 
+        private void Start()
+        {
+            btnSettings
+                .OnClickObservable
+                .ObserveOnMainThread()
+                .Subscribe(async _ =>
+                {
+                    GameManager.instance.PauseGame();
+                    await UIManager.instance.OpenUIAsync(AvailableUI.PausePanel);
+                })
+                .AddTo(this);
+        }
+
         public override WDButton[] GetSelectableButtons()
         {
             return new WDButton[] { };

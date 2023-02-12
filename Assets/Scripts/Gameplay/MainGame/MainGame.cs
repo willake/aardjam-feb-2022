@@ -22,5 +22,19 @@ namespace Game.Gameplay
         {
             await UniTask.Delay(TimeSpan.FromSeconds(2));
         }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                GameManager.instance.PauseGame();
+                OpenPausePanel();
+            }
+        }
+
+        private void OpenPausePanel()
+        {
+            UIManager.instance.OpenUIAsync(AvailableUI.PausePanel).Forget();
+        }
     }
 }
