@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using System;
+using DG.Tweening;
 
 namespace Game.Gameplay.Weathers
 {
@@ -10,10 +11,19 @@ namespace Game.Gameplay.Weathers
     {
         public override WeatherType WeatherType { get => WeatherType.Rainy; }
         [Header("References")]
+        public Transform[] clouds;
         public Rain rain;
+
+        [Header("Settings")]
+        public float cloudMoveDuration = 2f;
+        public Ease cloudMoveEase = Ease.OutSine;
 
         public override void Init()
         {
+            foreach (Transform cloud in clouds)
+            {
+                cloud.gameObject.SetActive(false);
+            }
             rain.gameObject.SetActive(false);
         }
 
@@ -21,6 +31,31 @@ namespace Game.Gameplay.Weathers
         {
             // start rainy
             rain.gameObject.SetActive(true);
+
+            Sequence sequence = DOTween.Sequence();
+
+            foreach (Transform cloud in clouds)
+            {
+                cloud.gameObject.SetActive(true);
+                float x = cloud.position.x;
+
+                if (x > 0)
+                {
+                    cloud.position = cloud.position
+                        + new Vector3(10, 0, 0);
+                }
+                else
+                {
+                    cloud.position = cloud.position
+                        + new Vector3(-10, 0, 0);
+                }
+
+                sequence.Join(
+                    cloud.DOMoveX(x, cloudMoveDuration).SetEase(cloudMoveEase)
+                );
+            }
+
+            await sequence.AsyncWaitForCompletion();
             rain.StartRaining();
             await UniTask.RunOnThreadPool(() => { });
         }
@@ -53,7 +88,30 @@ namespace Game.Gameplay.Weathers
         {
             // stop rainy
             rain.StopRaining();
-            await UniTask.Delay(TimeSpan.FromSeconds(2f));
+
+            Sequence sequence = DOTween.Sequence();
+
+            foreach (Transform cloud in clouds)
+            {
+                cloud.gameObject.SetActive(true);
+                float x = cloud.position.x;
+
+                if (x > 0)
+                {
+                    sequence.Join(
+                        cloud.DOMoveX(x + 10, cloudMoveDuration).SetEase(cloudMoveEase)
+                    );
+                }
+                else
+                {
+
+                    sequence.Join(
+                        cloud.DOMoveX(x - 10, cloudMoveDuration).SetEase(cloudMoveEase)
+                    );
+                }
+            }
+
+            await sequence.AsyncWaitForCompletion();
         }
     }
 }
