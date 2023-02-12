@@ -525,6 +525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 135097aa23302fb40bec869e08bf0ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  background: {fileID: 1441704094803182710}
   panel: {fileID: 7265174343594922926}
   btnScreenmode: {fileID: 7265174344704344875}
   btnResolution: {fileID: 8816264169863222433}
@@ -532,6 +533,8 @@ MonoBehaviour:
   sliderSFX: {fileID: 7265174344613728686}
   btnApply: {fileID: 2696420749574864156}
   btnClose: {fileID: 7265174343073790222}
+  fadeDuration: 0.4
+  fadeEase: 3
 --- !u!1 &6029382066949126618
 GameObject:
   m_ObjectHideFlags: 0

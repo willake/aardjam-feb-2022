@@ -21,13 +21,18 @@ namespace Game.UI
         protected ScreenAspectManager ScreenAspectManager { get => _screenAspectManager.Value; }
 
         [Title("References")]
-        public Transform panel;
+        public Image background;
+        public RectTransform panel;
         public WDTextButton btnScreenmode;
         public WDTextButton btnResolution;
         public Slider sliderMusic;
         public Slider sliderSFX;
         public WDTextButton btnApply;
         public WDTextButton btnClose;
+
+        [Header("Settings")]
+        public float fadeDuration = 0.2f;
+        public Ease fadeEase = Ease.OutSine;
 
         private ScreenMode _screenMode;
         private Resolution[] _resolutions;
@@ -131,7 +136,21 @@ namespace Game.UI
             UpdateButtons();
 
             gameObject.SetActive(true);
-            await UniTask.RunOnThreadPool(() => { });
+            panel.anchoredPosition = new Vector2(0, -450f);
+            Color c = background.color;
+            c.a = 0;
+            background.color = c;
+
+            Sequence sequence = DOTween.Sequence();
+
+            sequence
+                .Append(
+                    panel
+                        .DOAnchorPosY(0, fadeDuration).SetEase(fadeEase))
+                .Join(
+                    background.DOFade(0.2f, fadeDuration).SetEase(fadeEase));
+
+            await sequence.AsyncWaitForCompletion();
         }
         public override void Close()
         {
@@ -139,8 +158,17 @@ namespace Game.UI
         }
         public override async UniTask CloseAsync()
         {
+            Sequence sequence = DOTween.Sequence();
+
+            sequence
+                .Append(
+                    panel
+                        .DOAnchorPosY(-450, fadeDuration).SetEase(fadeEase))
+                .Join(
+                    background.DOFade(0, fadeDuration).SetEase(fadeEase));
+
+            await sequence.AsyncWaitForCompletion();
             gameObject.SetActive(false);
-            await UniTask.RunOnThreadPool(() => { });
         }
 
         private void UpdateButtons()
