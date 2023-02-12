@@ -29,6 +29,16 @@ namespace Game.Gameplay.Environments
             await OnEnterState(state);
         }
 
+        public async UniTask ChangeSkyColor(Color color)
+        {
+            await DOTween.To(
+                () => globalLight.color,
+                (color) => globalLight.color = color,
+                color,
+                transitionDuration
+            ).SetEase(transitionEase).AsyncWaitForCompletion();
+        }
+
         private async UniTask OnEnterState(DayState state)
         {
             Color target = GetDayStateColor(state);
