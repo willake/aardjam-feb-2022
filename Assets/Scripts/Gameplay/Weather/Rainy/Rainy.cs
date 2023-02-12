@@ -2,19 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using System;
 
 namespace Game.Gameplay.Weathers
 {
     public class Rainy : Weather
     {
         public override WeatherType WeatherType { get => WeatherType.Rainy; }
+        [Header("References")]
+        public Rain rain;
+
         public override void Init()
         {
+            rain.gameObject.SetActive(false);
         }
 
         public override async UniTask OnEnterDay()
         {
-            // sun on;
+            // start rainy
+            rain.gameObject.SetActive(true);
+            rain.StartRaining();
             await UniTask.RunOnThreadPool(() => { });
         }
 
@@ -38,14 +45,15 @@ namespace Game.Gameplay.Weathers
 
         public override async UniTask OnEnterNight()
         {
-            await UniTask.RunOnThreadPool(() => { });
             // sun down
+            await UniTask.RunOnThreadPool(() => { });
         }
 
         public override async UniTask OnExitNight()
         {
-            // nothing
-            await UniTask.RunOnThreadPool(() => { });
+            // stop rainy
+            rain.StopRaining();
+            await UniTask.Delay(TimeSpan.FromSeconds(2f));
         }
     }
 }
