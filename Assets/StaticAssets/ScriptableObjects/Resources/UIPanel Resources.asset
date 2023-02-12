@@ -16,3 +16,4 @@ MonoBehaviour:
   gameHUDPanel: {fileID: 6508905079759022395, guid: fe038840768ed614ca4c5f20652f8d53, type: 3}
   PredictionPanel: {fileID: 6985286389173873081, guid: e38307b49192cde459bf55d69b763366, type: 3}
   PausePanel: {fileID: 2717827100210294713, guid: ef2a22f9aae4cd6489493357a537fcea, type: 3}
+  SettingsPanel: {fileID: 4768916656506370189, guid: 8076a0867e9649f43aeae254bbcb7e4b, type: 3}

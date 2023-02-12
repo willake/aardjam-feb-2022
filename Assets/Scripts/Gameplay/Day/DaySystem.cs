@@ -49,7 +49,6 @@ namespace Game.Gameplay
                 weatherSystem.SetWeather(forecastSystem.currentForecastedWeatherType);
             else
                 weatherSystem.SetWeather(WeatherType.Sunny);
-
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.dayColor);
             await _gameHUDPanel.SetTimeAsync(DayState.Day);
             await weatherSystem.Weather.OnEnterDay();

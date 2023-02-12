@@ -17,6 +17,8 @@ namespace Game.UI
 
         [Title("References")]
         public WDTextButton btnPlay;
+        public WDTextButton btnSettings;
+        public WDTextButton btnExit;
 
         void Start()
         {
@@ -24,6 +26,21 @@ namespace Game.UI
                 .OnClickObservable
                 .ObserveOnMainThread()
                 .Subscribe(_ => SwitchToMainGame())
+                .AddTo(this);
+
+            btnSettings
+                .OnClickObservable
+                .ObserveOnMainThread()
+                .Subscribe(async _ =>
+                {
+                    await UIManager.instance.OpenUIAsync(AvailableUI.SettingsPanel);
+                })
+                .AddTo(this);
+
+            btnExit
+                .OnClickObservable
+                .ObserveOnMainThread()
+                .Subscribe(_ => GameManager.instance.ExitGame())
                 .AddTo(this);
 
             btnPlay.SetText("Play");
@@ -43,10 +60,16 @@ namespace Game.UI
 
         public override void Open()
         {
+#if UNITY_WEBGL
+            btnExit.gameObject.SetActive(false);
+#endif
             gameObject.SetActive(true);
         }
         public override async UniTask OpenAsync()
         {
+#if UNITY_WEBGL
+            btnExit.gameObject.SetActive(false);
+#endif
             gameObject.SetActive(true);
             await UniTask.RunOnThreadPool(() => { });
         }
