@@ -6,6 +6,7 @@ using System;
 using DG.Tweening;
 using Game.Gameplay.Environments;
 using Game.UI;
+using Game.Gameplay.Weathers;
 
 namespace Game.Gameplay
 {
@@ -20,6 +21,13 @@ namespace Game.Gameplay
         [Header("References")]
         public EnvironmentSystem environmentSystem;
         public BuildingSystem buildingSystem;
+        public VillagerSystem villagerSystem;
+        public WeatherSystem weatherSystem;
+
+        private const float dayAnimLength = 2f;
+        private const float middayVillagerAnimLength = 2f;
+        private const float middayBuildingAnimLength = 3f;
+        private const float nightAnimLength = 3f;
 
         public void Init()
         {
@@ -30,10 +38,13 @@ namespace Game.Gameplay
         public async void StartDay()
         {
             Debug.Log("Start Day");
-            await environmentSystem.SetState(DayState.Day);
             Debug.Log("Today is sunny");
-            await UniTask.Delay(TimeSpan.FromSeconds(3));
+            weatherSystem.SetWeather(WeatherType.Sunny);
+            await environmentSystem.ChangeSkyColor(weatherSystem.Weather.dayColor);
+            await weatherSystem.Weather.OnEnterDay();
+            villagerSystem.AddNewVillager();
             // play weather animation
+            await weatherSystem.Weather.OnExitDay();
             StartMidday();
         }
 
@@ -41,13 +52,16 @@ namespace Game.Gameplay
         async void StartMidday()
         {
             Debug.Log("Start Midday");
-            await environmentSystem.SetState(DayState.Midday);
-            // Debug.Log("Increase 1 villager");
+            await environmentSystem.ChangeSkyColor(weatherSystem.Weather.middayColor);
+            await weatherSystem.Weather.OnEnterMidday();
+            Debug.Log($"Increase 1 villager. Now is {villagerSystem.VillagerAmount}");
+            //Move villagers
+            await villagerSystem.MoveVillagersToTower();
+            await villagerSystem.StartTowerWork();
             buildingSystem.IncreaseFloor();
             Debug.Log($"Increase 1 floor. Now is {buildingSystem.Height}");
-            await UniTask.Delay(TimeSpan.FromSeconds(3));
-            // play building animation
-            // increase building height
+
+            await weatherSystem.Weather.OnExitMidday();
             StartNight();
         }
 
@@ -55,12 +69,18 @@ namespace Game.Gameplay
         async void StartNight()
         {
             Debug.Log("Start Night");
-            await environmentSystem.SetState(DayState.Night);
+            await weatherSystem.Weather.OnEnterNight();
+            await environmentSystem.ChangeSkyColor(weatherSystem.Weather.nightColor);
+
+            await villagerSystem.MoveVillagersHome();
+
             // open weather info UI
             PredictionPanel panel =
                 await UIManager.instance.OpenUIAsync(AvailableUI.PredictionPanel) as PredictionPanel;
             await panel.ShowEndDayButton();
             UIManager.instance.Prev();
+
+            await weatherSystem.Weather.OnExitNight();
             StartDay();
             // wait for end day
         }

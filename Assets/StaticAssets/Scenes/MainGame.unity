@@ -2432,6 +2432,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   environmentSystem: {fileID: 598240743}
   buildingSystem: {fileID: 1287317614}
+  villagerSystem: {fileID: 1194706078}
+  weatherSystem: {fileID: 1170159365}
 --- !u!1 &1299922593
 GameObject:
   m_ObjectHideFlags: 0
