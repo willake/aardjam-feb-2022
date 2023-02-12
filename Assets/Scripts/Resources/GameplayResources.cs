@@ -10,6 +10,7 @@ namespace Game
         [Title("Buildings")]
         public BuildingResources Buildings;
         public VillageResources Village;
+        public WeatherResources Weathers;
         [System.Serializable]
         public class BuildingResources
         {
@@ -21,6 +22,12 @@ namespace Game
         public class VillageResources
         {
             public GameObject Villager;
+        }
+        [System.Serializable]
+        public class WeatherResources
+        {
+            public GameObject Sunny;
+            public GameObject Rainy;
         }
     }
 }

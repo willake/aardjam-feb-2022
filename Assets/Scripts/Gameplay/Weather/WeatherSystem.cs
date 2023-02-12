@@ -7,18 +7,16 @@ namespace Game.Gameplay.Weathers
     public class WeatherSystem : MonoBehaviour
     {
         [Header("References")]
-        public Sunny sunny;
+        public WeatherFactory weatherFactory;
         public Weather Weather { get; private set; }
         public void SetWeather(WeatherType weatherType)
         {
-            switch (weatherType)
+            if (Weather != null)
             {
-                case WeatherType.Sunny:
-                default:
-                    Weather = sunny;
-                    Weather.gameObject.SetActive(true);
-                    break;
+                Destroy(Weather.gameObject);
             }
+
+            Weather = weatherFactory.GenerateWeather(weatherType, transform);
 
             Weather.Init();
         }

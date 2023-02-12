@@ -40,7 +40,7 @@ namespace Game.Gameplay
             Debug.Log("Start Day");
             await environmentSystem.SetState(DayState.Day);
             Debug.Log("Today is sunny");
-            weatherSystem.SetWeather(WeatherType.Sunny);
+            weatherSystem.SetWeather(WeatherType.Rainy);
             await weatherSystem.Weather.OnEnterDay();
             villagerSystem.AddNewVillager();
             // play weather animation

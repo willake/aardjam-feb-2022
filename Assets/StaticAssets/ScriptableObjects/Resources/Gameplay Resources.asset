@@ -18,3 +18,6 @@ MonoBehaviour:
     MidLevelWalls: {fileID: 7858462525864893101, guid: b4d824bdce1e1c04792e71097487ed0f, type: 3}
   Village:
     Villager: {fileID: 2662837417632103883, guid: 44e382be6b2aa8f4ea148d83857f69c1, type: 3}
+  Weathers:
+    Sunny: {fileID: 6392946827616906603, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
+    Rainy: {fileID: 4838783221692077954, guid: 1a3d5311747b0e740b47af6120710b1d, type: 3}
