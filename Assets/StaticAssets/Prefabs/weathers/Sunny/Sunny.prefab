@@ -9967,6 +9967,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02f835333ea3f4540b1e34dc563816cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dayColor: {r: 0.8509804, g: 0.8509804, b: 0.8509804, a: 0}
+  middayColor: {r: 1, g: 1, b: 1, a: 0}
+  nightColor: {r: 0.23529412, g: 0.3372549, b: 0.5294118, a: 0}
   sun: {fileID: 6392946826948278705}
   moon: {fileID: 6392946826725085086}
   staticStars: {fileID: 1795893698}

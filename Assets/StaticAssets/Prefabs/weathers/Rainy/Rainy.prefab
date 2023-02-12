@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f660064d20d424583b737b0286d559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dayColor: {r: 0.36565503, g: 0.51034105, b: 0.7830189, a: 0}
+  middayColor: {r: 0.32128873, g: 0.45846197, b: 0.7169812, a: 0}
+  nightColor: {r: 0.23529412, g: 0.3372549, b: 0.5294118, a: 0}
   rain: {fileID: 4838783222793326214}
 --- !u!1 &4838783223085958360
 GameObject:
