@@ -5,6 +5,7 @@ namespace Game.UI
         MenuPanel,
         GameHUDPanel,
         PredictionPanel,
-        PausePanel
+        PausePanel,
+        SettingsPanel
     }
 }
