@@ -54,6 +54,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnPlay: {fileID: 1388638855251664681}
+  btnSettings: {fileID: 1312397903611404083}
+  btnExit: {fileID: 942323708952379986}
 --- !u!1 &223458927386603000
 GameObject:
   m_ObjectHideFlags: 0
