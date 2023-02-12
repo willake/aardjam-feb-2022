@@ -15,7 +15,7 @@ namespace Game.Gameplay.Weathers
             toldBy = _toldBy;
             statementType = _statementType;
 
-            if (statementCredibility == StatementCredibility.Random)
+            if (_statementCredibility == StatementCredibility.Random)
             {
                 statementCredibility = Random.value >= 0.5f ?
                     StatementCredibility.Truth :

@@ -47,16 +47,40 @@ namespace Game.Gameplay.Weathers
             Debug.Log($"Second Talking person: {secondvillagerRiddle.toldBy.Name} {secondvillagerRiddle.villagerRiddleBelief} {secondvillagerRiddle.statementCredibility}");
         }
 
-        public string GenerateWeatherString()
+        public string GenerateWeatherPredictionText()
         {
             var randValue = Random.value;
 
             if (randValue <= 0.33f)
-                return $"Tomorrow, the weather is going to be {weatherRiddle.predictedWeatherType}";
+                return $"Tomorrow, the weather is going to be {weatherRiddle.predictedWeatherType}!";
             else if (randValue >= 0.66f)
-                return $"I feel it in my cloth! Tomorrow it will be {weatherRiddle.predictedWeatherType}";
+                return $"I feel it in my strings! Tomorrow it will be {weatherRiddle.predictedWeatherType}.";
             else
                 return $"Hmm.. It sure is feeling {weatherRiddle.predictedWeatherType}, isn't it?";
+        }
+
+        public string GenerateVillagerRiddleText(VillagerRiddle riddle)
+        {
+            var randValue = Random.value;
+
+            if (riddle.villagerRiddleBelief == RiddleElement.StatementCredibility.Truth)
+            {
+                if (randValue <= 0.33f)
+                    return $"That's right! {riddle.villagerRiddle.toldBy.Name} is totally right!";
+                else if (randValue >= 0.66f)
+                    return $"I think {riddle.villagerRiddle.toldBy.Name} is telling the truth.";
+                else
+                    return $"Totally! {riddle.villagerRiddle.toldBy.Name} is truthful.";
+            } else
+            {
+                if (randValue <= 0.33f)
+                    return $"{riddle.villagerRiddle.toldBy.Name} is a liar, I'm sure of it!";
+                else if (randValue >= 0.66f)
+                    return $"I'm pretty sure {riddle.villagerRiddle.toldBy.Name} isn't the most reliable...";
+                else
+                    return $"{riddle.villagerRiddle.toldBy.Name} is wrong. That can't be right!";
+
+            }
         }
     }
 }

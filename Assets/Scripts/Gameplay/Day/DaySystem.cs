@@ -97,10 +97,7 @@ namespace Game.Gameplay
             ForecastRiddle currentRiddle;
 
             forecastSystem.SetForecastedWeatherTomorrow();
-            if (currentDay != 0)
-                currentRiddle = forecastSystem.GenerateRiddle();
-            else
-                currentRiddle = forecastSystem.GenerateRiddle(true);
+            currentRiddle = forecastSystem.GenerateRiddle(currentDay == 0);
 
             // open weather info UI
             PredictionPanel panel =
