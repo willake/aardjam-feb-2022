@@ -100,8 +100,20 @@ namespace Game.Gameplay
 
             await HandleWeatherEffects();
 
-            await weatherSystem.Weather.OnExitMidday();
-            StartNight();
+            if (villagerSystem.VillagerAmount == 0)
+            {
+                GameManager.instance.PauseGame();
+                GameOverPanel gameOverPanel =
+                    await UIManager.instance.OpenUIAsync(AvailableUI.GameOverPanel) as GameOverPanel;
+                gameOverPanel.SetDay(currentDay);
+                gameOverPanel.SetFloor(buildingSystem.Floor);
+                gameOverPanel.SetVillager(villagerSystem.VillagerAmount);
+            }
+            else
+            {
+                await weatherSystem.Weather.OnExitMidday();
+                StartNight();
+            }
         }
 
         async UniTask HandleWeatherEffects()

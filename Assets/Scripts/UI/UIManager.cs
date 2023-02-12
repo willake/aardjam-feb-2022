@@ -174,6 +174,8 @@ namespace Game.UI
                     return ResourceManager.instance.UIPanelResources.PausePanel;
                 case AvailableUI.SettingsPanel:
                     return ResourceManager.instance.UIPanelResources.SettingsPanel;
+                case AvailableUI.GameOverPanel:
+                    return ResourceManager.instance.UIPanelResources.GameOverPanel;
                 default:
                     return null;
             }

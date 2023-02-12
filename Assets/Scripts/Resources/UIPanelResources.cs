@@ -25,5 +25,8 @@ namespace Game
         [Required("Must link a ui panel asset")]
         [AssetsOnly]
         public GameObject SettingsPanel;
+        [Required("Must link a ui panel asset")]
+        [AssetsOnly]
+        public GameObject GameOverPanel;
     }
 }
