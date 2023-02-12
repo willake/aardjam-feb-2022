@@ -7,6 +7,7 @@ using DG.Tweening;
 using Game.Gameplay.Environments;
 using Game.UI;
 using Game.Gameplay.Weathers;
+using Game.Audios;
 
 namespace Game.Gameplay
 {
@@ -28,6 +29,8 @@ namespace Game.Gameplay
 
         private GameHUDPanel _gameHUDPanel;
 
+        private bool _willRingBell = true;
+
         private int currentDay;
 
         public void Init()
@@ -42,6 +45,7 @@ namespace Game.Gameplay
             _gameHUDPanel.SetDay(currentDay);
             _gameHUDPanel.SetFloor(buildingSystem.Floor);
             _gameHUDPanel.SetTime(DayState.Day);
+            _gameHUDPanel.SetVillager(villagerSystem.VillagerAmount);
         }
 
         // prediction outcome phase
@@ -51,11 +55,36 @@ namespace Game.Gameplay
                 weatherSystem.SetWeather(forecastSystem.currentForecastedWeatherType);
             else
                 weatherSystem.SetWeather(WeatherType.Sunny);
+
+            if (_willRingBell)
+            {
+                WrappedAudioClip clip = ResourceManager.instance.AudioResources.gameplayAudios.BellRing;
+                AudioManager.instance.PlaySFX(
+                    clip.clip,
+                    clip.volume
+                );
+                await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+                AudioManager.instance.PlaySFX(
+                    clip.clip,
+                    clip.volume
+                );
+                await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+                AudioManager.instance.PlaySFX(
+                    clip.clip,
+                    clip.volume
+                );
+                await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+            }
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.dayColor);
             await _gameHUDPanel.SetTimeAsync(DayState.Day);
             await weatherSystem.Weather.OnEnterDay();
             villagerSystem.AppearVillagers();
-            villagerSystem.AddNewVillager();
+
+            if (weatherSystem.Weather.WeatherType == WeatherType.Sunny)
+            {
+                villagerSystem.AddNewVillager();
+                _gameHUDPanel.SetVillager(villagerSystem.VillagerAmount);
+            }
             // play weather animation
             await weatherSystem.Weather.OnExitDay();
             StartMidday();
@@ -68,9 +97,6 @@ namespace Game.Gameplay
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.middayColor);
             await _gameHUDPanel.SetTimeAsync(DayState.Midday);
             await weatherSystem.Weather.OnEnterMidday();
-            Debug.Log($"Increase 1 villager. Now is {villagerSystem.VillagerAmount}");
-            //Move villagers
-            await villagerSystem.MoveVillagersToTower();
 
             await HandleWeatherEffects();
 
@@ -80,8 +106,12 @@ namespace Game.Gameplay
 
         async UniTask HandleWeatherEffects()
         {
-            if (weatherSystem.Weather.WeatherType == WeatherType.Sunny)
+            if (_willRingBell)
             {
+                Debug.Log($"Increase 1 villager. Now is {villagerSystem.VillagerAmount}");
+                //Move villagers
+                await villagerSystem.MoveVillagersToTower();
+
                 await villagerSystem.StartTowerWork();
                 buildingSystem.IncreaseFloor();
                 Debug.Log($"Increase 1 floor. Now is {buildingSystem.Floor}");
@@ -92,9 +122,13 @@ namespace Game.Gameplay
                     .Append(gameCamera.LookAtAsync(buildingSystem.GetTowerTopPos()))
                     .Join(gameCamera.ZoomAsync(buildingSystem.Height));
             }
-            else if (weatherSystem.Weather.WeatherType == WeatherType.Rainy || weatherSystem.Weather.WeatherType == WeatherType.Thundering)
+
+            if (_willRingBell &&
+                (weatherSystem.Weather.WeatherType == WeatherType.Thundering
+                || weatherSystem.Weather.WeatherType == WeatherType.Rainy))
             {
                 await villagerSystem.EliminateVillagers();
+                _gameHUDPanel.SetVillager(villagerSystem.VillagerAmount);
             }
         }
 
@@ -106,7 +140,10 @@ namespace Game.Gameplay
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.nightColor);
             await _gameHUDPanel.SetTimeAsync(DayState.Night);
 
-            await villagerSystem.MoveVillagersHome();
+            if (_willRingBell)
+            {
+                await villagerSystem.MoveVillagersHome();
+            }
 
             ForecastRiddle currentRiddle;
 
@@ -117,7 +154,7 @@ namespace Game.Gameplay
             PredictionPanel panel =
                 await UIManager.instance.OpenUIAsync(AvailableUI.PredictionPanel) as PredictionPanel;
             panel.SetForecast(currentRiddle);
-            await panel.ShowEndDayButton();
+            _willRingBell = await panel.ShowEndDayButton();
             UIManager.instance.Prev();
 
             currentDay++;

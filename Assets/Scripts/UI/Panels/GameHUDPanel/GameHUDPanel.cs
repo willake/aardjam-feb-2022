@@ -16,6 +16,7 @@ namespace Game.UI
         public WDButton btnSettings;
         public WDText textDay;
         public WDText textFloor;
+        public WDText textVillager;
         public Clock clock;
 
         private void Start()
@@ -73,6 +74,11 @@ namespace Game.UI
         public void SetFloor(int floor)
         {
             textFloor.SetText($"Floor {floor}");
+        }
+
+        public void SetVillager(int villager)
+        {
+            textVillager.SetText($"Villager {villager}");
         }
 
         public async UniTask SetTimeAsync(DayState dayState)

@@ -19,4 +19,4 @@ MonoBehaviour:
   gameplayAudios:
     BellRing:
       clip: {fileID: 8300000, guid: 356c3cb54e2b75c45bfb8a79930b90c5, type: 3}
-      volume: 1
+      volume: 0.2
