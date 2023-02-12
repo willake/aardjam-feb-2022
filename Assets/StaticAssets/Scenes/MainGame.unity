@@ -733,7 +733,7 @@ MonoBehaviour:
   m_LightType: 4
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 0.8509804, g: 0.8509804, b: 0.8509804, a: 1}
+  m_Color: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 1}
   m_Intensity: 1
   m_LightVolumeOpacity: 0
   m_ApplyToSortingLayers: 000000000f1c4488c14eb0e0
@@ -1036,7 +1036,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &660417100
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1573,17 +1573,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &989340409 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6392946827616906597, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-  m_PrefabInstance: {fileID: 6392946826725085084}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02f835333ea3f4540b1e34dc563816cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1014890504
 GameObject:
   m_ObjectHideFlags: 0
@@ -2117,6 +2106,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1170159364}
   - component: {fileID: 1170159365}
+  - component: {fileID: 1170159366}
   m_Layer: 0
   m_Name: WeatherSystem
   m_TagString: Untagged
@@ -2150,7 +2140,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55c947b586a4c07439792e0967610bfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sunny: {fileID: 989340409}
+  weatherFactory: {fileID: 1170159366}
+--- !u!114 &1170159366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170159363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ec7c879b613d8c41b671ab51f29abfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1194706076
 GameObject:
   m_ObjectHideFlags: 0
@@ -3258,64 +3260,3 @@ Transform:
   m_Father: {fileID: 254248081}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &6392946826725085084
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 257044720, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6392946827616906596, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6392946827616906596, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6392946827616906596, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6392946827616906596, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6392946827616906596, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6392946827616906596, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6392946827616906596, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6392946827616906596, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6392946827616906596, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6392946827616906596, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6392946827616906596, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6392946827616906603, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
-      propertyPath: m_Name
-      value: Sunny
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 14de9e28fd74dd84c9737defcc606574, type: 3}
