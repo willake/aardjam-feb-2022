@@ -1,0 +1,72 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Cysharp.Threading.Tasks;
+using System;
+using UnityEngine.Experimental.Rendering.Universal;
+using DG.Tweening;
+
+namespace Game.Gameplay.Environments
+{
+    public class EnvironmentSystem : MonoBehaviour
+    {
+        [Header("References")]
+        public Light2D globalLight;
+
+        [Header("Settings")]
+        public Color dayColor;
+        public Color middayColor;
+        public Color nightColor;
+        public float transitionDuration = 0.4f;
+        public Ease transitionEase = Ease.Linear;
+
+        public DayState State { get; private set; }
+
+        public async UniTask SetState(DayState state)
+        {
+            await OnExitState(State);
+            State = state;
+            await OnEnterState(state);
+        }
+
+        public async UniTask ChangeSkyColor(Color color)
+        {
+            await DOTween.To(
+                () => globalLight.color,
+                (color) => globalLight.color = color,
+                color,
+                transitionDuration
+            ).SetEase(transitionEase).AsyncWaitForCompletion();
+        }
+
+        private async UniTask OnEnterState(DayState state)
+        {
+            Color target = GetDayStateColor(state);
+            await DOTween.To(
+                () => globalLight.color,
+                (color) => globalLight.color = color,
+                target,
+                transitionDuration
+            ).SetEase(transitionEase).AsyncWaitForCompletion();
+        }
+
+        private async UniTask OnExitState(DayState state)
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(1));
+        }
+
+        private Color GetDayStateColor(DayState state)
+        {
+            switch (state)
+            {
+                case DayState.Day:
+                default:
+                    return dayColor;
+                case DayState.Midday:
+                    return middayColor;
+                case DayState.Night:
+                    return nightColor;
+            }
+        }
+    }
+}

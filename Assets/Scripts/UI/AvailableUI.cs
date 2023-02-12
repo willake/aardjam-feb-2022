@@ -3,6 +3,10 @@ namespace Game.UI
     public enum AvailableUI
     {
         MenuPanel,
-        GameHUDPanel
+        GameHUDPanel,
+        PredictionPanel,
+        PausePanel,
+        SettingsPanel,
+        GameOverPanel
     }
 }

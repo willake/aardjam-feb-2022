@@ -17,16 +17,35 @@ namespace Game.UI
 
         [Title("References")]
         public WDTextButton btnPlay;
+        public WDTextButton btnSettings;
+        public WDTextButton btnExit;
+        public WDText textVersion;
 
         void Start()
         {
             btnPlay
-                .ButtonDidClick
+                .OnClickObservable
                 .ObserveOnMainThread()
                 .Subscribe(_ => SwitchToMainGame())
                 .AddTo(this);
 
+            btnSettings
+                .OnClickObservable
+                .ObserveOnMainThread()
+                .Subscribe(async _ =>
+                {
+                    await UIManager.instance.OpenUIAsync(AvailableUI.SettingsPanel);
+                })
+                .AddTo(this);
+
+            btnExit
+                .OnClickObservable
+                .ObserveOnMainThread()
+                .Subscribe(_ => GameManager.instance.ExitGame())
+                .AddTo(this);
+
             btnPlay.SetText("Play");
+            textVersion.SetText(Consts.VERSION);
         }
 
         public override WDButton[] GetSelectableButtons()
@@ -43,15 +62,27 @@ namespace Game.UI
 
         public override void Open()
         {
+#if UNITY_WEBGL
+            btnExit.gameObject.SetActive(false);
+#endif
             gameObject.SetActive(true);
+        }
+        public override async UniTask OpenAsync()
+        {
+#if UNITY_WEBGL
+            btnExit.gameObject.SetActive(false);
+#endif
+            gameObject.SetActive(true);
+            await UniTask.RunOnThreadPool(() => { });
         }
         public override void Close()
         {
             gameObject.SetActive(false);
         }
-        public override void CloseImmediately()
+        public override async UniTask CloseAsync()
         {
             gameObject.SetActive(false);
+            await UniTask.RunOnThreadPool(() => { });
         }
 
         public void SwitchToMainGame()

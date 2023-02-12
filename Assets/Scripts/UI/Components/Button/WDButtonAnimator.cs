@@ -24,7 +24,7 @@ namespace Game.UI
                     break;
                 case WDButtonState.Hover:
                     sequence.Append(
-                        GetBody().transform.DOScale(1.2f, animationTime)
+                        GetBody().transform.DOScale(1.05f, animationTime)
                     );
                     break;
                 case WDButtonState.Click:

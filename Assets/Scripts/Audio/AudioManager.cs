@@ -34,6 +34,10 @@ namespace Game.Audios
         private float _cachedSFXVolume = 0.0f;
         private float _cachedMusicVolume = 0.0f;
 
+        public float MusicVolume { get => _cachedMusicVolume; }
+        public float MusicVolumePercentage { get => (_cachedMusicVolume + 60.0f) / 60.0f; }
+        public float SFXVolume { get => _cachedSFXVolume; }
+        public float SFXVolumePercentage { get => (_cachedSFXVolume + 60.0f) / 60.0f; }
         private void Start()
         {
             _musicMixerGroup = masterMixerGroup.FindMatchingGroups("Music")[0];
@@ -90,6 +94,17 @@ namespace Game.Audios
             _cachedMusicVolume = volume;
         }
 
+        public void SetMusicVolumeByPercentage(float p)
+        {
+            float percentage = Mathf.Clamp(p, 0.0f, 1.0f);
+
+            float volume = -60 + (60 * percentage);
+
+            masterMixerGroup.SetFloat(PARAM_NAME_MUSIC_VOLUME, volume);
+
+            _cachedMusicVolume = volume;
+        }
+
         // 0 ~ -60 db
         public void SetSFXVolume(float volume)
         {
@@ -97,6 +112,17 @@ namespace Game.Audios
             {
                 masterMixerGroup.SetFloat(PARAM_NAME_SFX_VOLUME, volume);
             }
+            _cachedSFXVolume = volume;
+        }
+
+        public void SetSFXVolumeByPercentage(float p)
+        {
+            float percentage = Mathf.Clamp(p, 0.0f, 1.0f);
+
+            float volume = -60 + (60 * percentage);
+
+            masterMixerGroup.SetFloat(PARAM_NAME_SFX_VOLUME, volume);
+
             _cachedSFXVolume = volume;
         }
 

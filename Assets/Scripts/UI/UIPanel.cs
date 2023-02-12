@@ -1,4 +1,5 @@
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 namespace Game.UI
 {
@@ -6,8 +7,9 @@ namespace Game.UI
     {
         public abstract AvailableUI Type { get; }
         public abstract void Open();
+        public abstract UniTask OpenAsync();
         public abstract void Close();
-        public abstract void CloseImmediately();
+        public abstract UniTask CloseAsync();
         public abstract WDButton[] GetSelectableButtons();
         public abstract void PerformCancelAction();
     }
