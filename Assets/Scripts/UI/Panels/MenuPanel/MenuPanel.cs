@@ -60,10 +60,16 @@ namespace Game.UI
 
         public override void Open()
         {
+#if UNITY_WEBGL
+            btnExit.gameObject.SetActive(false);
+#endif
             gameObject.SetActive(true);
         }
         public override async UniTask OpenAsync()
         {
+#if UNITY_WEBGL
+            btnExit.gameObject.SetActive(false);
+#endif
             gameObject.SetActive(true);
             await UniTask.RunOnThreadPool(() => { });
         }
