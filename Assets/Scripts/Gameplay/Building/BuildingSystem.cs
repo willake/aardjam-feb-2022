@@ -18,7 +18,7 @@ namespace Game.Gameplay
 
         public void Init()
         {
-            Floor = 0;
+            Floor = 1;
             _floors.Add(
                 factory.GenerateBuildingBlock(BuildingBlockType.TopLevel, buildingBase)
             );

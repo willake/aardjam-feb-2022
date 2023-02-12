@@ -65,6 +65,16 @@ namespace Game.UI
             clock.SetTime(dayState);
         }
 
+        public void SetDay(int day)
+        {
+            textDay.SetText($"Day {day}");
+        }
+
+        public void SetFloor(int floor)
+        {
+            textFloor.SetText($"Floor {floor}");
+        }
+
         public async UniTask SetTimeAsync(DayState dayState)
         {
             await clock.SetTimeAsync(dayState).AsyncWaitForCompletion();

@@ -39,6 +39,8 @@ namespace Game.Gameplay
 
             _gameHUDPanel = UIManager.instance
                 .OpenUI(AvailableUI.GameHUDPanel) as GameHUDPanel;
+            _gameHUDPanel.SetDay(currentDay);
+            _gameHUDPanel.SetFloor(buildingSystem.Floor);
             _gameHUDPanel.SetTime(DayState.Day);
         }
 
@@ -71,6 +73,7 @@ namespace Game.Gameplay
             await villagerSystem.MoveVillagersToTower();
             await villagerSystem.StartTowerWork();
             buildingSystem.IncreaseFloor();
+            _gameHUDPanel.SetFloor(buildingSystem.Floor);
             Debug.Log($"Increase 1 floor. Now is {buildingSystem.Floor}");
 
             Sequence sequence = DOTween.Sequence();
@@ -106,6 +109,7 @@ namespace Game.Gameplay
             UIManager.instance.Prev();
 
             currentDay++;
+            _gameHUDPanel.SetDay(currentDay);
 
             await weatherSystem.Weather.OnExitNight();
             StartDay();

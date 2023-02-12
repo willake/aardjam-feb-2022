@@ -17,8 +17,8 @@ namespace Game.UI
         [Title("References")]
         public GameObject panelWeather;
         public WDButton btnEndDay;
-        public TextMeshProUGUI weatherForecasterStatement;
-        public TextMeshProUGUI weatherForecasterName;
+        public WDText weatherForecasterStatement;
+        public WDText weatherForecasterName;
         public Transform villagerRiddleHolder;
 
         public override WDButton[] GetSelectableButtons()
@@ -68,8 +68,9 @@ namespace Game.UI
 
         public void SetForecast(ForecastRiddle riddle)
         {
-            weatherForecasterName.text = riddle.weatherRiddle.toldBy.Name;
-            weatherForecasterStatement.text = riddle.GenerateWeatherPredictionText();
+
+            weatherForecasterName.SetText(riddle.weatherRiddle.toldBy.Name);
+            weatherForecasterStatement.SetText(riddle.GenerateWeatherPredictionText());
 
             //Instead of iterating over, for now just add two riddles manually.
             if (riddle.firstvillagerRiddle != null)
