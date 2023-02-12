@@ -23,23 +23,34 @@ namespace Game.Gameplay
         public BuildingSystem buildingSystem;
         public VillagerSystem villagerSystem;
         public WeatherSystem weatherSystem;
+        public ForecastSystem forecastSystem;
 
         private const float dayAnimLength = 2f;
         private const float middayVillagerAnimLength = 2f;
         private const float middayBuildingAnimLength = 3f;
         private const float nightAnimLength = 3f;
 
+        private int currentDay;
+
         public void Init()
         {
+            currentDay = 0;
             buildingSystem.Init();
         }
 
         // prediction outcome phase
         public async void StartDay()
         {
-            Debug.Log("Start Day");
-            Debug.Log("Today is sunny");
-            weatherSystem.SetWeather(WeatherType.Sunny);
+            if (currentDay != 0)
+            {
+                Debug.Log(forecastSystem.currentForecastedWeatherType);
+                weatherSystem.SetWeather(forecastSystem.currentForecastedWeatherType);
+            }
+            else
+            {
+                weatherSystem.SetWeather(WeatherType.Sunny);
+            }
+
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.dayColor);
             await weatherSystem.Weather.OnEnterDay();
             villagerSystem.AppearVillagers();
@@ -75,11 +86,15 @@ namespace Game.Gameplay
 
             await villagerSystem.MoveVillagersHome();
 
+            forecastSystem.SetForecastedWeatherTomorrow();
+
             // open weather info UI
             PredictionPanel panel =
                 await UIManager.instance.OpenUIAsync(AvailableUI.PredictionPanel) as PredictionPanel;
             await panel.ShowEndDayButton();
             UIManager.instance.Prev();
+
+            currentDay++;
 
             await weatherSystem.Weather.OnExitNight();
             StartDay();
