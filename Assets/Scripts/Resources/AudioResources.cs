@@ -11,11 +11,18 @@ namespace Game
     {
         [Title("UI Audio Assets")]
         public UIAudios uiAudios;
+        public GameplayAudios gameplayAudios;
 
         [Serializable]
         public class UIAudios
         {
             public WrappedAudioClip ButtonClick;
+        }
+
+        [Serializable]
+        public class GameplayAudios
+        {
+            public WrappedAudioClip BellRing;
         }
     }
 }
