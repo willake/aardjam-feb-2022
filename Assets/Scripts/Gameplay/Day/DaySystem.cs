@@ -19,6 +19,7 @@ namespace Game.Gameplay
     public class DaySystem : MonoBehaviour
     {
         [Header("References")]
+        public GameCamera gameCamera;
         public EnvironmentSystem environmentSystem;
         public BuildingSystem buildingSystem;
         public VillagerSystem villagerSystem;
@@ -32,6 +33,8 @@ namespace Game.Gameplay
         public void Init()
         {
             buildingSystem.Init();
+            gameCamera.LookAt(buildingSystem.GetTowerTopPos());
+            gameCamera.Zoom(1.5f);
         }
 
         // prediction outcome phase
@@ -59,7 +62,13 @@ namespace Game.Gameplay
             await villagerSystem.MoveVillagersToTower();
             await villagerSystem.StartTowerWork();
             buildingSystem.IncreaseFloor();
-            Debug.Log($"Increase 1 floor. Now is {buildingSystem.Height}");
+            Debug.Log($"Increase 1 floor. Now is {buildingSystem.Floor}");
+
+            Sequence sequence = DOTween.Sequence();
+
+            sequence
+                .Append(gameCamera.LookAtAsync(buildingSystem.GetTowerTopPos()))
+                .Join(gameCamera.ZoomAsync(buildingSystem.Height));
 
             await weatherSystem.Weather.OnExitMidday();
             StartNight();
