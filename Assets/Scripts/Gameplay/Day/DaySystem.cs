@@ -38,9 +38,9 @@ namespace Game.Gameplay
         public async void StartDay()
         {
             Debug.Log("Start Day");
-            await environmentSystem.SetState(DayState.Day);
             Debug.Log("Today is sunny");
             weatherSystem.SetWeather(WeatherType.Rainy);
+            await environmentSystem.ChangeSkyColor(weatherSystem.Weather.dayColor);
             await weatherSystem.Weather.OnEnterDay();
             villagerSystem.AddNewVillager();
             // play weather animation
@@ -52,8 +52,8 @@ namespace Game.Gameplay
         async void StartMidday()
         {
             Debug.Log("Start Midday");
+            await environmentSystem.ChangeSkyColor(weatherSystem.Weather.middayColor);
             await weatherSystem.Weather.OnEnterMidday();
-            await environmentSystem.SetState(DayState.Midday);
             Debug.Log($"Increase 1 villager. Now is {villagerSystem.VillagerAmount}");
             //Move villagers
             await villagerSystem.MoveVillagersToTower();
@@ -69,9 +69,8 @@ namespace Game.Gameplay
         async void StartNight()
         {
             Debug.Log("Start Night");
-
             await weatherSystem.Weather.OnEnterNight();
-            await environmentSystem.SetState(DayState.Night);
+            await environmentSystem.ChangeSkyColor(weatherSystem.Weather.nightColor);
 
             await villagerSystem.MoveVillagersHome();
 
