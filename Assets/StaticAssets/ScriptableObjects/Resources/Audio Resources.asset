@@ -20,3 +20,7 @@ MonoBehaviour:
     BellRing:
       clip: {fileID: 8300000, guid: 356c3cb54e2b75c45bfb8a79930b90c5, type: 3}
       volume: 0.2
+  musicAudios:
+    BackgroundMusic:
+      clip: {fileID: 8300000, guid: 1083f58ab3905c148a22ca3a62de2fc8, type: 3}
+      volume: 0.3

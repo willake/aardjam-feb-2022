@@ -34,6 +34,7 @@ namespace Game.Audios
         private float _cachedSFXVolume = 0.0f;
         private float _cachedMusicVolume = 0.0f;
 
+        public bool IsMusicPlaying { get => _musicSource.isPlaying; }
         public float MusicVolume { get => _cachedMusicVolume; }
         public float MusicVolumePercentage { get => (_cachedMusicVolume + 60.0f) / 60.0f; }
         public float SFXVolume { get => _cachedSFXVolume; }
@@ -159,11 +160,12 @@ namespace Game.Audios
 
         public void PlayMusic(AudioClip music, float volume = 1, float pitch = 1f)
         {
-            if (isSfxMuted) return;
+            if (isMusicMuted) return;
 
             _musicSource.clip = music;
             _musicSource.volume = volume;
             _musicSource.pitch = pitch;
+            _musicSource.loop = true;
             _musicSource.Play();
         }
 
