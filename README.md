@@ -3,9 +3,9 @@
 This is a game jam project of Aardjam Feb 2022
 [Link](https://huienlin.itch.io/teruteruberu)
 
-> Do not push any commits to the `main` and `develop` branches. Instead, you should create a new branch and a pull request for merging.
-
 ![Gameplay](readme_assets/gameplay/work.gif)
+
+> Do not push any commits to the `main` and `develop` branches. Instead, you should create a new branch and a pull request for merging.
 
 ## Unity Version
 
