@@ -51,11 +51,13 @@ namespace Game.Gameplay
         // prediction outcome phase
         public async void StartDay()
         {
+            Debug.Log("A");
             if (currentDay != 0)
                 weatherSystem.SetWeather(forecastSystem.currentForecastedWeatherType);
             else
                 weatherSystem.SetWeather(WeatherType.Sunny);
 
+            Debug.Log("B");
             if (_willRingBell)
             {
                 WrappedAudioClip clip = ResourceManager.instance.AudioResources.gameplayAudios.BellRing;
@@ -75,18 +77,24 @@ namespace Game.Gameplay
                 );
                 await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
             }
+            Debug.Log("C");
             await environmentSystem.ChangeSkyColor(weatherSystem.Weather.dayColor);
+            Debug.Log("D");
             await _gameHUDPanel.SetTimeAsync(DayState.Day);
+            Debug.Log("E");
             await weatherSystem.Weather.OnEnterDay();
+            Debug.Log("F");
             villagerSystem.AppearVillagers();
-
+            Debug.Log("G");
             if (weatherSystem.Weather.WeatherType == WeatherType.Sunny)
             {
                 villagerSystem.AddNewVillager();
                 _gameHUDPanel.SetVillager(villagerSystem.VillagerAmount);
             }
+            Debug.Log("H");
             // play weather animation
             await weatherSystem.Weather.OnExitDay();
+            Debug.Log("I");
             StartMidday();
         }
 
