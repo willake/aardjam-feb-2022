@@ -99,7 +99,7 @@ namespace Game.Saves
             PlayerPrefs.SetString(_keys_key, keysJson);
             PlayerPrefs.Save();
 
-            return UniTask.RunOnThreadPool(() => { });
+            return UniTask.Create(async () => { });
         }
 
         public override UniTask Detele(string fileName)
@@ -112,7 +112,7 @@ namespace Game.Saves
             PlayerPrefs.SetString(_keys_key, keysJson);
             PlayerPrefs.Save();
 
-            return UniTask.RunOnThreadPool(() => { });
+            return UniTask.Create(async () => { });
         }
 
         public override UniTask ClearAll()
@@ -129,7 +129,7 @@ namespace Game.Saves
             PlayerPrefs.DeleteKey(_keys_key);
             PlayerPrefs.Save();
 
-            return UniTask.RunOnThreadPool(() => { });
+            return UniTask.Create(async () => { });
         }
     }
 }

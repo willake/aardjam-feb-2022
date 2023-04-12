@@ -1,6 +1,9 @@
-# 2D Template
+# TeruTeruBeru
 
-This is a template for fast development with Unity. With this template, you can quickly create a game. Gameplay implementation and UI programming would be the things you would be most involved with.
+This is a game jam project of Aardjam Feb 2022
+[Link](https://huienlin.itch.io/teruteruberu)
+
+![Gameplay](readme_assets/gameplay/work.gif)
 
 > Do not push any commits to the `main` and `develop` branches. Instead, you should create a new branch and a pull request for merging.
 

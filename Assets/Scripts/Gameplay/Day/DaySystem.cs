@@ -79,7 +79,6 @@ namespace Game.Gameplay
             await _gameHUDPanel.SetTimeAsync(DayState.Day);
             await weatherSystem.Weather.OnEnterDay();
             villagerSystem.AppearVillagers();
-
             if (weatherSystem.Weather.WeatherType == WeatherType.Sunny)
             {
                 villagerSystem.AddNewVillager();

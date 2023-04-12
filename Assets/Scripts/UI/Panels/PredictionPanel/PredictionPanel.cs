@@ -71,7 +71,6 @@ namespace Game.UI
                 new Vector3(1, 0, 1);
             await panelWeather.transform
                 .DOScaleY(1, 0.4f).SetEase(Ease.InSine).AsyncWaitForCompletion();
-            await UniTask.RunOnThreadPool(() => { });
         }
         public override void Close()
         {
@@ -85,7 +84,6 @@ namespace Game.UI
         public override async UniTask CloseAsync()
         {
             gameObject.SetActive(false);
-            await UniTask.RunOnThreadPool(() => { });
         }
 
         public async UniTask<bool> ShowEndDayButton()

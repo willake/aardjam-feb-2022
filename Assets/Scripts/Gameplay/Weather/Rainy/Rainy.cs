@@ -57,31 +57,26 @@ namespace Game.Gameplay.Weathers
 
             await sequence.AsyncWaitForCompletion();
             rain.StartRaining();
-            await UniTask.RunOnThreadPool(() => { });
         }
 
         public override async UniTask OnExitDay()
         {
             // nothing
-            await UniTask.RunOnThreadPool(() => { });
         }
 
         public override async UniTask OnEnterMidday()
         {
             // nothing
-            await UniTask.RunOnThreadPool(() => { });
         }
 
         public override async UniTask OnExitMidday()
         {
             // nothing
-            await UniTask.RunOnThreadPool(() => { });
         }
 
         public override async UniTask OnEnterNight()
         {
             // sun down
-            await UniTask.RunOnThreadPool(() => { });
         }
 
         public override async UniTask OnExitNight()

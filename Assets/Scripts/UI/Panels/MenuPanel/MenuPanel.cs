@@ -73,7 +73,6 @@ namespace Game.UI
             btnExit.gameObject.SetActive(false);
 #endif
             gameObject.SetActive(true);
-            await UniTask.RunOnThreadPool(() => { });
         }
         public override void Close()
         {
@@ -82,7 +81,6 @@ namespace Game.UI
         public override async UniTask CloseAsync()
         {
             gameObject.SetActive(false);
-            await UniTask.RunOnThreadPool(() => { });
         }
 
         public void SwitchToMainGame()
