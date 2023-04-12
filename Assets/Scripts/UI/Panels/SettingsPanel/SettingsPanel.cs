@@ -192,9 +192,15 @@ namespace Game.UI
             btnScreenmode.SetTextColor(new Color(0.6f, 0.6f, 0.6f, 1));
             btnScreenmode.SetIsInteractable(false);
 #endif
-
-            Resolution resolution = _resolutions[_resolutionsIndex];
-            btnResolution.SetText($"{resolution.width} x {resolution.height}");
+            if (-1 < _resolutionsIndex && _resolutionsIndex < _resolutions.Length - 1)
+            {
+                Resolution resolution = _resolutions[_resolutionsIndex];
+                btnResolution.SetText($"{resolution.width} x {resolution.height}");
+            }
+            else
+            {
+                btnResolution.SetText($"0 x 0");
+            }
 
             sliderMusic.value = AudioManager.instance.MusicVolumePercentage;
             sliderSFX.value = AudioManager.instance.SFXVolumePercentage;
