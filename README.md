@@ -523,11 +523,7 @@ public class IconButton : WDButton
 
 [UniTask](https://github.com/Cysharp/UniTask) - Provides an efficient allocation free async/await integration for Unity
 
-[Odin Inspector](https://odininspector.com/) - Very powerful Editor plugins, supporting Dictionary serialization
-
 [ProceduralUIImage](https://assetstore.unity.com/packages/tools/gui/procedural-ui-image-52200) - Useful fast UI development tool
-
-[Behavior Designer](https://assetstore.unity.com/packages/tools/visual-scripting/behavior-designer-behavior-trees-for-everyone-15277) - Behavior Designer is a behaviour tree implementation tool
 
 ## Custom Plugins
 
